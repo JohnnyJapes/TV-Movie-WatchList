@@ -7,8 +7,12 @@ module com.tv.tvmoviewatchlist {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
 
-    opens model.tv to javafx.fxml;
-    exports model.tv;
+    opens model.content to javafx.fxml;
+    exports model.content;
     exports controller;
     opens controller to javafx.fxml;
+    exports model;
+    opens model to javafx.fxml;
+    exports model.Person;
+    opens model.Person to javafx.fxml;
 }
