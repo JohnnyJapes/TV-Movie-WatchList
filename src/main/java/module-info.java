@@ -6,6 +6,7 @@ module com.tv.tvmoviewatchlist {
     requires com.dlsc.formsfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires java.sql;
 
     opens model.content to javafx.fxml;
     exports model.content;
