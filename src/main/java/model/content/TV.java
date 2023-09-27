@@ -13,8 +13,8 @@ public class TV extends ContentBase {
     private Person creator;
 
 
-    public TV(String title, String summary, Date releaseDate, float userRating, Person[] cast, int totalEpisodes, int watchedEpisodes, Person creator) {
-        super(title, summary, releaseDate, userRating, cast);
+    public TV(String title, String summary, Date releaseDate, String imageLocation, float userRating, Person[] cast, int totalEpisodes, int watchedEpisodes, Person creator) {
+        super(title, summary, imageLocation, releaseDate, userRating, cast);
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
         this.creator = creator;

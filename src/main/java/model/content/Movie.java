@@ -9,9 +9,8 @@ public class Movie extends ContentBase {
     private final String contentType = "Movie";
     private Person director;
 
-
-    public Movie(String title, String summary, Date releaseDate, float userRating, Person[] cast, Person director) {
-        super(title, summary, releaseDate, userRating, cast);
+    public Movie(String title, String summary, String imageLocation, Date releaseDate, float userRating, Person[] cast, Person director) {
+        super(title, summary, imageLocation, releaseDate, userRating, cast);
         this.director = director;
     }
 
@@ -22,5 +21,23 @@ public class Movie extends ContentBase {
      */
     public String getContentType() {
         return contentType;
+    }
+
+    /**
+     * Gets director.
+     *
+     * @return model.Person.Person, value of director
+     */
+    public Person getDirector() {
+        return director;
+    }
+
+    /**
+     * Method to set director.
+     *
+     * @param director model.Person.Person - director
+     */
+    public void setDirector(Person director) {
+        this.director = director;
     }
 }
