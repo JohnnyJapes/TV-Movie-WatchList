@@ -7,6 +7,8 @@ import java.util.Date;
 public class ContentBase {
 
     private String title, summary, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
+    //ID should refer to a local database ID
+    private int tmdbID, ID;    //ID should refer to a local database ID
     private Date releaseDate;
     private float userRating;
     private Person[] cast;
