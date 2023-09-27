@@ -9,13 +9,13 @@ import java.util.Date;
 public class Person {
     //variables
     //known for should store the role of the person: director, actor, etc.
-    private String name, biography, gender, knownFor;
+    private String name, biography, gender, knownFor, imageLocation; // imagelocation will either be a file path or URL
     //tmdb is the TV Movie Database
     //ID should refer to a local database ID
     private int tmdbID, ID;
     private Date birthday, deathDay;
     //credits should contain entries of movies/tv shows they have been a part of
-    private ContentBase[] credits;
+    private ContentBase[] credits; //variable type might change
 
     public Person(String name, String biography, String gender, String knownFor, int tmdbID, int ID, Date birthday, Date deathDay, ContentBase[] credits) {
         this.name = name;
