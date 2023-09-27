@@ -219,8 +219,25 @@ public class Person {
         this.credits = credits;
     }
 
+    /**
+     * Gets imageLocation.
+     *
+     * @return java.lang.String, value of imageLocation
+     */
+    public String getImageLocation() {
+        return imageLocation;
+    }
 
-    //Methods
+    /**
+     * Method to set imageLocation.
+     *
+     * @param imageLocation java.lang.String - imageLocation
+     */
+    public void setImageLocation(String imageLocation) {
+        this.imageLocation = imageLocation;
+    }
+
+//Methods
 
     /**
      * Method that should Search TMDB for a person and return the first 10 results
