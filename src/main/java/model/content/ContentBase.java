@@ -2,21 +2,33 @@ package model.content;
 
 import model.Person.Person;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class ContentBase {
 
-    private String title, summary, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
+    protected String title, summary, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
     //ID should refer to a local database ID
     private int tmdbID, ID;    //ID should refer to a local database ID
     private Date releaseDate;
     private float userRating;
-    private Person[] cast;
+    private ArrayList<Person> cast;
 
-    public ContentBase(String title, String summary, String imageLocation, Date releaseDate, float userRating, Person[] cast) {
+    public ContentBase() {
+        cast = new ArrayList<Person>();
+    }
+
+    public ContentBase(int ID){
+        //call function to fetch info from database
+
+    }
+
+    public ContentBase(String title, String summary, String imageLocation, int tmdbID, int ID, Date releaseDate, float userRating, ArrayList<Person> cast) {
         this.title = title;
         this.summary = summary;
         this.imageLocation = imageLocation;
+        this.tmdbID = tmdbID;
+        this.ID = ID;
         this.releaseDate = releaseDate;
         this.userRating = userRating;
         this.cast = cast;
@@ -95,20 +107,56 @@ public class ContentBase {
     }
 
     /**
+     * Gets tmdbID.
+     *
+     * @return int, value of tmdbID
+     */
+    public int getTmdbID() {
+        return tmdbID;
+    }
+
+    /**
+     * Method to set tmdbID.
+     *
+     * @param tmdbID int - tmdbID
+     */
+    public void setTmdbID(int tmdbID) {
+        this.tmdbID = tmdbID;
+    }
+
+    /**
+     * Gets ID.
+     *
+     * @return int, value of ID
+     */
+    public int getID() {
+        return ID;
+    }
+
+    /**
+     * Method to set ID.
+     *
+     * @param ID int - ID
+     */
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    /**
      * Gets cast.
      *
-     * @return model.Person.Person[], value of cast
+     * @return java.util.ArrayList<model.Person.Person>, value of cast
      */
-    public Person[] getCast() {
+    public ArrayList<Person> getCast() {
         return cast;
     }
 
     /**
      * Method to set cast.
      *
-     * @param cast model.Person.Person[] - cast
+     * @param cast java.util.ArrayList<model.Person.Person> - cast
      */
-    public void setCast(Person[] cast) {
+    public void setCast(ArrayList<Person> cast) {
         this.cast = cast;
     }
 

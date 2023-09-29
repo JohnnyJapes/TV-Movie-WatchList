@@ -15,9 +15,40 @@ public class Person {
     private int tmdbID, ID;
     private Date birthday, deathDay;
     //credits should contain entries of movies/tv shows they have been a part of
-    private ContentBase[] credits; //variable type might change
+    private ArrayList<ContentBase> credits; //variable type might change
 
-    public Person(String name, String biography, String gender, String knownFor, int tmdbID, int ID, Date birthday, Date deathDay, ContentBase[] credits) {
+    public Person() {
+        name = "";
+        biography= "";
+        gender = "";
+        knownFor = "";
+        imageLocation = "";
+        credits = new ArrayList<ContentBase>();
+
+    }
+
+    /**
+     * Constructor without list of credits
+     * @param name
+     * @param biography
+     * @param gender
+     * @param knownFor
+     * @param tmdbID
+     * @param ID
+     * @param birthday
+     * @param deathDay
+     */
+    public Person(String name, String biography, String gender, String knownFor, int tmdbID, int ID, Date birthday, Date deathDay) {
+        this.name = name;
+        this.biography = biography;
+        this.gender = gender;
+        this.knownFor = knownFor;
+        this.tmdbID = tmdbID;
+        this.ID = ID;
+        this.birthday = birthday;
+        this.deathDay = deathDay;
+    }
+    public Person(String name, String biography, String gender, String knownFor, int tmdbID, int ID, Date birthday, Date deathDay, ArrayList<ContentBase> credits) {
         this.name = name;
         this.biography = biography;
         this.gender = gender;
@@ -204,18 +235,18 @@ public class Person {
     /**
      * Gets credits.
      *
-     * @return model.content.ContentBase[], value of credits
+     * @return java.util.ArrayList<model.content.ContentBase>, value of credits
      */
-    public ContentBase[] getCredits() {
+    public ArrayList<ContentBase> getCredits() {
         return credits;
     }
 
     /**
      * Method to set credits.
      *
-     * @param credits model.content.ContentBase[] - credits
+     * @param credits java.util.ArrayList<model.content.ContentBase> - credits
      */
-    public void setCredits(ContentBase[] credits) {
+    public void setCredits(ArrayList<ContentBase> credits) {
         this.credits = credits;
     }
 

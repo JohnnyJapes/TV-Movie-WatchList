@@ -2,6 +2,7 @@ package model.content;
 
 import model.Person.Person;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Movie extends ContentBase {
@@ -9,8 +10,22 @@ public class Movie extends ContentBase {
     private final String contentType = "Movie";
     private Person director;
 
-    public Movie(String title, String summary, String imageLocation, Date releaseDate, float userRating, Person[] cast, Person director) {
-        super(title, summary, imageLocation, releaseDate, userRating, cast);
+    public Movie(){
+        super();
+        director = new Person();
+    }
+
+    public Movie(Person director) {
+        this.director = director;
+    }
+
+    public Movie(int ID, Person director) {
+        super(ID);
+        this.director = director;
+    }
+
+    public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, Date releaseDate, float userRating, ArrayList<Person> cast, Person director) {
+        super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.director = director;
     }
 

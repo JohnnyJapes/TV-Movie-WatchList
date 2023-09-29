@@ -2,6 +2,7 @@ package model.content;
 
 import model.Person.Person;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class TV extends ContentBase {
@@ -13,8 +14,28 @@ public class TV extends ContentBase {
     private Person creator;
 
 
-    public TV(String title, String summary, Date releaseDate, String imageLocation, float userRating, Person[] cast, int totalEpisodes, int watchedEpisodes, Person creator) {
-        super(title, summary, imageLocation, releaseDate, userRating, cast);
+    public TV(){
+        super();
+        creator = new Person();
+        totalEpisodes = 0;
+        watchedEpisodes = 0;
+    }
+
+    public TV(int totalEpisodes, int watchedEpisodes, Person creator) {
+        this.totalEpisodes = totalEpisodes;
+        this.watchedEpisodes = watchedEpisodes;
+        this.creator = creator;
+    }
+
+    public TV(int ID, int totalEpisodes, int watchedEpisodes, Person creator) {
+        super(ID);
+        this.totalEpisodes = totalEpisodes;
+        this.watchedEpisodes = watchedEpisodes;
+        this.creator = creator;
+    }
+
+    public TV(String title, String summary, String imageLocation, int tmdbID, int ID, Date releaseDate, float userRating, ArrayList<Person> cast, int totalEpisodes, int watchedEpisodes, Person creator) {
+        super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
         this.creator = creator;
