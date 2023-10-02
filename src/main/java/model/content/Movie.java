@@ -2,8 +2,12 @@ package model.content;
 
 import model.Person.Person;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import okhttp3.OkHttpClient;
+import okhttp3.*;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class Movie extends ContentBase {
 
@@ -54,5 +58,27 @@ public class Movie extends ContentBase {
      */
     public void setDirector(Person director) {
         this.director = director;
+    }
+
+
+    public static void searchTMDB(String title){
+        OkHttpClient client = new OkHttpClient();
+        String query = StringEscapeUtils.escapeHtml4(title);
+
+
+        Request request = new Request.Builder()
+                .url("https://api.themoviedb.org/3/search/movie?query="+ query+"&include_adult=false&language=en-US&page=1")
+                .get()
+                .addHeader("accept", "application/json")
+                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .build();
+        try {
+            Response response = client.newCall(request).execute();
+            System.out.println(response.body().string());
+        }
+        catch(Error | IOException e){
+            System.out.println(e);
+            //e.printStackTrace();
+        }
     }
 }

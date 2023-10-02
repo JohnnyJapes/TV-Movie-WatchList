@@ -1,6 +1,8 @@
 module com.tv.tvmoviewatchlist {
     requires javafx.controls;
     requires javafx.fxml;
+    requires okhttp3;
+    requires org.apache.commons.text;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
