@@ -1,16 +1,15 @@
 package model.content;
 
 import model.Person.Person;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ContentBase {
 
     protected String title, summary, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
     //ID should refer to a local database ID
     private int tmdbID, ID;    //ID should refer to a local database ID
-    private Date releaseDate;
+    private LocalDate releaseDate;
     private float userRating;
     private ArrayList<Person> cast;
 
@@ -23,7 +22,7 @@ public class ContentBase {
 
     }
 
-    public ContentBase(String title, String summary, String imageLocation, int tmdbID, int ID, Date releaseDate, float userRating, ArrayList<Person> cast) {
+    public ContentBase(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast) {
         this.title = title;
         this.summary = summary;
         this.imageLocation = imageLocation;
@@ -73,20 +72,31 @@ public class ContentBase {
     /**
      * Gets releaseDate.
      *
-     * @return java.util.Date, value of releaseDate
+     * @return java.time.LocalDate, value of releaseDate
      */
-    public Date getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
     /**
      * Method to set releaseDate.
      *
-     * @param releaseDate java.util.Date - releaseDate
+     * @param releaseDate java.time.LocalDate - releaseDate
      */
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
+    /**
+     * Method to set releaseDate.  Parses a string to a LocalDate object
+     *
+     * @param releaseDate String - releaseDate
+     */
+    public void setReleaseDate(String releaseDate) {
+
+        LocalDate tempDate = LocalDate.parse(releaseDate);
+        this.releaseDate = tempDate;
+    }
+
 
     /**
      * Gets userRating.

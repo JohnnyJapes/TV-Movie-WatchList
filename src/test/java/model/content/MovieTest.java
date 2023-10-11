@@ -7,9 +7,9 @@ class MovieTest {
 
     @Test
     void generateMovie() {
-        //Movie test = new Movie();
-        Movie test = Movie.generateMovie("680");
-        System.out.println(test.getTmdbID());
-        assertEquals(680, Movie.generateMovie("680").getTmdbID());
+        Movie tempMovie = Movie.generateMovie("680");
+        assertEquals(680, tempMovie.getTmdbID() );
+        assertEquals("Uma Thurman", tempMovie.getCast().get(2).getName());
+        assertEquals("John Travolta", tempMovie.getCast().get(0).getName());
     }
 }
