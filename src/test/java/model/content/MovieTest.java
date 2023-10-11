@@ -11,5 +11,6 @@ class MovieTest {
         assertEquals(680, tempMovie.getTmdbID() );
         assertEquals("Uma Thurman", tempMovie.getCast().get(2).getName());
         assertEquals("John Travolta", tempMovie.getCast().get(0).getName());
+        assertEquals("Quentin Tarantino", tempMovie.getDirector().getName());
     }
 }

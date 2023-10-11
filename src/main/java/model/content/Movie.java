@@ -218,6 +218,32 @@ public class Movie extends ContentBase {
                 }
                 System.out.println();
             }
+            while(!"crew".equals(parser.getCurrentName())) token = parser.nextToken();
+            if (token == JsonToken.FIELD_NAME && "crew".equals(parser.getCurrentName())) {
+
+                //System.out.println("Cast - \n");
+                token = parser.nextToken();
+                token = parser.nextToken();
+                token = parser.nextToken();// // Read left bracket i.e. [
+                // Loop to print array elements until right bracket i.e ]
+                while (token != JsonToken.END_ARRAY){
+                    while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
+                    token = parser.nextToken();
+                    int id = parser.getIntValue();
+                    //will eventually replace this code with a person method filling out their information
+                    while (!"name".equals(parser.getCurrentName())) token = parser.nextToken();
+                    token = parser.nextToken();
+                    Person director = new Person();
+                    String directorName = parser.getText();
+                    while (!"job".equals(parser.getCurrentName())) token = parser.nextToken();
+                    token = parser.nextToken();
+                    if (parser.getText().equals("Director")) {
+                        director.setName(directorName);
+                        tempMovie.setDirector(director);
+                        break;
+                    }
+                }
+            }
 
 //            System.out.println(root.fieldNames().next());
 //            temp.setTitle( root.get("original_title").asText());;
