@@ -3,6 +3,7 @@ module com.tv.tvmoviewatchlist {
     requires javafx.fxml;
     requires okhttp3;
     requires org.apache.commons.text;
+    requires com.fasterxml.jackson.databind;
 
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;

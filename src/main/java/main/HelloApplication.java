@@ -16,7 +16,7 @@ public class HelloApplication extends Application {
         stage.setTitle("Watchlist");
         stage.setScene(scene);
         System.out.println("Tv-Movie-Watchlist");
-        Movie.searchTMDB("Pulp Fiction");
+        //Movie.searchTMDB("Pulp Fiction");
         stage.show();
 
     }
