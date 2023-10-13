@@ -117,13 +117,14 @@ public class Movie extends ContentBase {
             JsonParser parser = factory.createParser(response.body().string());
             JsonToken token = parser.nextToken();
             // Read JSON object
-            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
-            //extra parses are to avoid other fields named id
-            token = parser.nextToken();
-            token = parser.nextToken();
-            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
-            token = parser.nextToken();
-            token = parser.nextToken();
+//            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
+//            //extra parses are to avoid other fields named id
+//            token = parser.nextToken();
+//            token = parser.nextToken();
+//            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
+//            token = parser.nextToken();
+//            token = parser.nextToken();
+            while(!"homepage".equals(parser.getCurrentName()) ) token = parser.nextToken(); //skip over irrelevant IDs
             while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
             if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
                 token = parser.nextToken();
@@ -161,7 +162,7 @@ public class Movie extends ContentBase {
             parser.close();
 
 
-            return tempMovie;
+
         }
         catch(Error | IOException e){
             System.out.println(e);
