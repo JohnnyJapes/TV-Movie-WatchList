@@ -6,4 +6,6 @@ public interface TMDBcompatable {
      * @param tmdbID - int
      */
     public void getTMDBdetails(int tmdbID);
+
+    public void searchTMDB(String query);
 }
