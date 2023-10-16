@@ -21,4 +21,6 @@ module com.tv.tvmoviewatchlist {
     opens model.Person to javafx.fxml;
     exports main;
     opens main to javafx.fxml;
+    exports model.connectors;
+    opens model.connectors to javafx.fxml;
 }
