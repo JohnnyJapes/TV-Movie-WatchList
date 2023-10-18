@@ -9,17 +9,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class MovieTest {
 
     @Test
-    void generateMovie() {
-        Movie tempMovie = Movie.generateMovie("680");
+    void generateTMBDdetails() {
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
         assertEquals(680, tempMovie.getTmdbID() );
 
     }
 
     @Test
     void addCast(){
-        Movie tempMovie = Movie.generateMovie("680");
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
         tempMovie.setCast(new ArrayList<Person>());
-        tempMovie = Movie.addCast(tempMovie);
+        tempMovie.addCast();
         assertEquals("Uma Thurman", tempMovie.getCast().get(2).getName());
         assertEquals("John Travolta", tempMovie.getCast().get(0).getName());
 
@@ -27,9 +29,10 @@ class MovieTest {
 
     @Test
     void addDirector(){
-        Movie tempMovie = Movie.generateMovie("680");
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
         tempMovie.setDirector(new Person());
-        tempMovie = Movie.addDirector(tempMovie);
+        tempMovie.addDirector();
         assertEquals("Quentin Tarantino", tempMovie.getDirector().getName());
 
 
