@@ -10,34 +10,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class TVTest {
 
     @Test
-    void generateTVshow() {
-        TV tempTV = TV.generateTVshow("1920");
+    void getTMDBdetails() {
+        TV tempTV = new TV();
+        tempTV.getTMDBdetails(1920);
         assertEquals(1920, tempTV.getTmdbID() );
-        tempTV = TV.generateTVshow("1950");
+        tempTV = new TV(1950);
         assertEquals(1950, tempTV.getTmdbID() );
     }
 
     @Test
     void addCast() {
-        TV tempTV = TV.generateTVshow("1920");
+        TV tempTV = new TV(1920);
         tempTV.setCast(new ArrayList<Person>());
-        tempTV = TV.addCast(tempTV);
+        tempTV.addCast();
         assertEquals("Kyle MacLachlan", tempTV.getCast().get(0).getName() );
-        tempTV = TV.generateTVshow("1950");
+        tempTV = new TV(1950);
         tempTV.setCast(new ArrayList<Person>());
-        tempTV = TV.addCast(tempTV);
+        tempTV.addCast();
         assertEquals("Gregory Smith", tempTV.getCast().get(1).getName() );
     }
 
     @Test
     void addCreators() {
-        TV tempTV = TV.generateTVshow("1920");
+        TV tempTV = new TV(1920);
         tempTV.setCreators(new ArrayList<Person>());
-        tempTV = TV.addCreators(tempTV);
+        tempTV.addCreators();
         assertEquals("David Lynch", tempTV.getCreators().get(0).getName() );
-        tempTV = TV.generateTVshow("1950");
+        tempTV = new TV(1950);
         tempTV.setCreators(new ArrayList<Person>());
-        tempTV = TV.addCreators(tempTV);
+        tempTV.addCreators();
         assertEquals("Greg Berlanti", tempTV.getCreators().get(0).getName() );
     }
 }

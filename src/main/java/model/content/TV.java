@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
+import model.TMDBcompatible;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -13,7 +14,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class TV extends ContentBase {
+public class TV extends ContentBase implements TMDBcompatible {
 
     private final String contentType = "TV";
     //total episodes is the total number of episodes in a tv show.
@@ -27,6 +28,9 @@ public class TV extends ContentBase {
         creators = new ArrayList<Person>();
         totalEpisodes = 0;
         watchedEpisodes = 0;
+    }
+    public TV(int tmdbID){
+        getTMDBdetails(tmdbID);
     }
 
     public TV(int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
@@ -112,16 +116,13 @@ public class TV extends ContentBase {
         this.creators = creators;
     }
 
-    public static TV generateTVshow(String tmdbID){
+    public void getTMDBdetails(int tmdbID){
 
 
         OkHttpClient client = new OkHttpClient();
-        String query = StringEscapeUtils.escapeHtml4(tmdbID);
-
-        TV tempTV = new TV();
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/tv/" + query + "?language=en-US")
+                .url("https://api.themoviedb.org/3/tv/" + tmdbID + "?language=en-US")
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
@@ -142,7 +143,7 @@ public class TV extends ContentBase {
                 if (token == JsonToken.VALUE_STRING) {
                     System.out.println("first_air_date : " + parser.getText());
                     LocalDate releaseDate = LocalDate.parse(parser.getText());
-                    tempTV.setReleaseDate(releaseDate);
+                    this.setReleaseDate(releaseDate);
                 }
             }
             while(!"homepage".equals(parser.getCurrentName()) ) token = parser.nextToken(); //skip over irrelevant IDs
@@ -151,7 +152,7 @@ public class TV extends ContentBase {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_NUMBER_INT) {
                     System.out.println("ID : " + parser.getIntValue());
-                    tempTV.setTmdbID(parser.getIntValue());
+                    this.setTmdbID(parser.getIntValue());
                 }
             }
             while(!"number_of_episodes".equals(parser.getCurrentName()) ) token = parser.nextToken();
@@ -159,7 +160,7 @@ public class TV extends ContentBase {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_NUMBER_INT) {
                     System.out.println("number_of_episodes : " + parser.getText());
-                    tempTV.setTotalEpisodes(parser.getIntValue());
+                    this.setTotalEpisodes(parser.getIntValue());
                 }
             }
             while(!"original_name".equals(parser.getCurrentName()) ) token = parser.nextToken();
@@ -168,7 +169,7 @@ public class TV extends ContentBase {
 
                 if (token == JsonToken.VALUE_STRING) {
                     System.out.println("name : " + parser.getText());
-                    tempTV.setTitle(parser.getText());
+                    this.setTitle(parser.getText());
                 }
             }
             while(!"overview".equals(parser.getCurrentName()) ) token = parser.nextToken();
@@ -176,7 +177,7 @@ public class TV extends ContentBase {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
                     System.out.println("overview : " + parser.getText());
-                    tempTV.setOverview(parser.getText());
+                    this.setOverview(parser.getText());
                 }
             }
 
@@ -192,16 +193,21 @@ public class TV extends ContentBase {
 
         }
 
-        tempTV = TV.addCast(tempTV);
+        addCast();
 
-        tempTV = TV.addCreators(tempTV);
+        addCreators();
 
-        return tempTV;
 
     }
-    public static TV addCast(TV tempTV){
+
+    @Override
+    public Object searchTMDB(String query) {
+        return null;
+    }
+
+    public void addCast(){
         OkHttpClient client = new OkHttpClient();
-        String query = StringEscapeUtils.escapeHtml4(Integer.toString(tempTV.getTmdbID()));
+        String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
 
         try{
             Request request = new Request.Builder()
@@ -257,7 +263,7 @@ public class TV extends ContentBase {
                     }
                     //System.out.println(parser.getCurrentName());
                     System.out.println();
-                    tempTV.getCast().add(tempPerson);
+                    this.getCast().add(tempPerson);
                 }
                 System.out.println();
             }
@@ -271,12 +277,11 @@ public class TV extends ContentBase {
 
         }
 
-        return tempTV;
 
     }
-    public static TV addCreators(TV tempTV){
+    public void addCreators(){
         OkHttpClient client = new OkHttpClient();
-        String query = StringEscapeUtils.escapeHtml4(Integer.toString(tempTV.getTmdbID()));
+        String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
 
         try{
             Request request = new Request.Builder()
@@ -339,7 +344,7 @@ public class TV extends ContentBase {
 
                     //System.out.println(parser.getCurrentName());
                     System.out.println();
-                    tempTV.getCreators().add(tempPerson);
+                    this.getCreators().add(tempPerson);
                 }
                 System.out.println();
             }
@@ -352,6 +357,5 @@ public class TV extends ContentBase {
              e.printStackTrace();
 
         }
-        return tempTV;
     }
 }
