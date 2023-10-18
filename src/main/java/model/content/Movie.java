@@ -3,22 +3,16 @@ package model.content;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import model.Person.Person;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 import model.TMDBcompatible;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 import org.apache.commons.text.StringEscapeUtils;
-import com.fasterxml.jackson.databind.*;
 
 public class Movie extends ContentBase implements TMDBcompatible {
 
@@ -42,6 +36,9 @@ public class Movie extends ContentBase implements TMDBcompatible {
     public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast, Person director) {
         super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.director = director;
+    }
+    public Movie(int tmdbID){
+    getTMDBdetails(tmdbID);
     }
 
     /**
@@ -150,7 +147,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
                     System.out.println("overview : " + parser.getText());
-                    this.setSummary(parser.getText());
+                    this.setOverview(parser.getText());
                 }
             }
             while(!"release_date".equals(parser.getCurrentName()) ) token = parser.nextToken();

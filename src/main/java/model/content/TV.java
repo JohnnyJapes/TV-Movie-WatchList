@@ -176,7 +176,7 @@ public class TV extends ContentBase {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
                     System.out.println("overview : " + parser.getText());
-                    tempTV.setSummary(parser.getText());
+                    tempTV.setOverview(parser.getText());
                 }
             }
 

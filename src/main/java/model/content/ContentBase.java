@@ -1,12 +1,14 @@
 package model.content;
 
 import model.Person.Person;
+
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class ContentBase {
 
-    protected String title, summary, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
+    protected String title, overview, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
     //ID should refer to a local database ID
     private int tmdbID, ID;    //ID should refer to a local database ID
     private LocalDate releaseDate;
@@ -22,9 +24,9 @@ public class ContentBase {
 
     }
 
-    public ContentBase(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast) {
+    public ContentBase(String title, String overview, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast) {
         this.title = title;
-        this.summary = summary;
+        this.overview = overview;
         this.imageLocation = imageLocation;
         this.tmdbID = tmdbID;
         this.ID = ID;
@@ -56,17 +58,17 @@ public class ContentBase {
      *
      * @return java.lang.String, value of summary
      */
-    public String getSummary() {
-        return summary;
+    public String getOverview() {
+        return overview;
     }
 
     /**
      * Method to set summary.
      *
-     * @param summary java.lang.String - summary
+     * @param overview java.lang.String - summary
      */
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     /**
@@ -186,5 +188,106 @@ public class ContentBase {
      */
     public void setImageLocation(String imageLocation) {
         this.imageLocation = imageLocation;
+    }
+
+
+    public void createTable(){
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            statement.executeUpdate("drop table if exists person");
+
+            String[] strColumns = {"title","overview","imagelocation", "releaseDate"};
+            String[] intColumns = {"tmdbID"};
+            String[] decimalColumns = {"tmdbRating" };
+            String query = "create table if not exists content (id integer primary key asc";
+            for (String str : strColumns){
+                query += ", "+str + " text";
+            }
+            for (String str : intColumns){
+                query += ", "+str + " int ";
+            }
+            for (String str : decimalColumns){
+                query += ", "+str + " real";
+            }
+            query += ")";
+
+
+            statement.executeUpdate(query);
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+    public void createRow(){
+        {
+            Connection connection = null;
+            try
+            {
+                // create a database connection
+                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdbID) values(?,?,?)");
+                statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+                statement.setString(1,this.title);
+                statement.setString(2,this.overview);
+                statement.setInt(3,tmdbID);
+
+
+
+                statement.executeUpdate();
+                ResultSet rs = connection.createStatement().executeQuery("select * from content");
+                while(rs.next())
+                {
+                    // read the result set
+                    System.out.println("title = " + rs.getString("title"));
+                    System.out.println("id = " + rs.getInt("id"));
+                    System.out.println("overview = " + rs.getString("overview"));
+                    System.out.println("tmdbID = " + rs.getFloat("tmdbid"));
+                }
+            }
+            catch(SQLException e)
+            {
+                // if the error message is "out of memory",
+                // it probably means no database file is found
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    if(connection != null)
+                        connection.close();
+                }
+                catch(SQLException e)
+                {
+                    // connection close failed.
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
     }
 }
