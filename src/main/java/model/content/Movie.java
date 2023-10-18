@@ -73,26 +73,89 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         OkHttpClient client = new OkHttpClient();
         String query = StringEscapeUtils.escapeHtml4(title);
+        ArrayList<Movie> movies = new ArrayList<>();
 
 
         Request request = new Request.Builder()
-                .url("https://api.themoviedb.org/3/movie/680?language=en-US"+ query+"&include_adult=false&language=en-US&page=1")
+                .url("https://api.themoviedb.org/3/search/movie?query="+ query+"&include_adult=false&language=en-US&page=1")
                 .get()
                 .addHeader("accept", "application/json")
                 .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
                 .build();
 
+
         try {
             Response response = client.newCall(request).execute();
-            System.out.println(response.body().string());
+            // De-serialize to an movie object
+
+            JsonFactory factory = new JsonFactory();
+            JsonParser parser = factory.createParser(response.body().string());
+            JsonToken token = parser.nextToken();
+            // Read JSON object
+            while(!"results".equals(parser.getCurrentName())) token = parser.nextToken();
+            if (token == JsonToken.FIELD_NAME && "results".equals(parser.getCurrentName())) {
+                //System.out.println("Cast - \n");
+                token = parser.nextToken();
+                token = parser.nextToken();
+                token = parser.nextToken();// // Read left bracket i.e. [
+                // Loop to print array elements until right bracket i.e ]
+                for (int i = 0; i < 7; i++) {
+                    Movie tempMovie = new Movie();
+                    parser.nextToken();
+                    if (token == JsonToken.END_ARRAY) break;
+                    while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_NUMBER_INT) {
+                            System.out.println("ID : " + parser.getIntValue());
+                            tempMovie.setTmdbID(parser.getIntValue());
+                        }
+                    }
+                    while (!"original_title".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "original_title".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_STRING) {
+                            System.out.println("original_title : " + parser.getText());
+                            tempMovie.setTitle(parser.getText());
+                        }
+                    }
+                    while (!"overview".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "overview".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_STRING) {
+                            System.out.println("overview : " + parser.getText());
+                            tempMovie.setOverview(parser.getText());
+                        }
+                    }
+                    while (!"release_date".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "release_date".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_STRING) {
+                            System.out.println("release_date : " + parser.getText());
+                            if (parser.getText() != "")
+                            {
+                            LocalDate releaseDate = LocalDate.parse(parser.getText());
+                            tempMovie.setReleaseDate(releaseDate);
+                            }
+                        }
+                    }
+                    movies.add(tempMovie);
+
+                }
+            }
+            //close the parser
+            parser.close();
+
+
 
         }
         catch(Error | IOException e){
             System.out.println(e);
-            //e.printStackTrace();
+            // e.printStackTrace();
+
         }
-        Movie temp = new Movie();
-        return temp;
+
+        return movies;
 
     }
     public void getTMDBdetails(int tmdbID){
@@ -118,13 +181,6 @@ public class Movie extends ContentBase implements TMDBcompatible {
             JsonParser parser = factory.createParser(response.body().string());
             JsonToken token = parser.nextToken();
             // Read JSON object
-//            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
-//            //extra parses are to avoid other fields named id
-//            token = parser.nextToken();
-//            token = parser.nextToken();
-//            while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
-//            token = parser.nextToken();
-//            token = parser.nextToken();
             while(!"homepage".equals(parser.getCurrentName()) ) token = parser.nextToken(); //skip over irrelevant IDs
             while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
             if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {

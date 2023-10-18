@@ -8,7 +8,7 @@ public interface TMDBcompatible {
     public void getTMDBdetails(int tmdbID);
 
     /**
-     * Search TMDB for query. Type of search depends on object calling this method.
+     * Search TMDB for query string. Type of search depends on object calling this method.
      * @param query
      */
     public Object searchTMDB(String query);
