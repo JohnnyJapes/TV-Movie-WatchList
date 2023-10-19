@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 public class TV extends ContentBase implements TMDBcompatible {
 
-    private final String contentType = "TV";
+    private final int contentType = 2; //1 for movies, 2 for tv shows
     //total episodes is the total number of episodes in a tv show.
     private int totalEpisodes, watchedEpisodes;
     //series creator
@@ -54,11 +54,11 @@ public class TV extends ContentBase implements TMDBcompatible {
     }
 
     /**
-     * Gets contentType.
+     * Gets contentType. 1 is a Movie, 2 is a TV show
      *
      * @return java.lang.String, value of contentType
      */
-    public String getContentType() {
+    public int getContentType() {
         return contentType;
     }
 

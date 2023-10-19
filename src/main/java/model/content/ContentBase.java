@@ -200,11 +200,11 @@ public class ContentBase {
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            statement.executeUpdate("drop table if exists person");
+            statement.executeUpdate("drop table if exists content");
 
             String[] strColumns = {"title","overview","imagelocation", "releaseDate"};
-            String[] intColumns = {"tmdbID"};
-            String[] decimalColumns = {"tmdbRating" };
+            String[] intColumns = {"tmdbID, contentType"};
+            String[] decimalColumns = {"tmdbRating"};
             String query = "create table if not exists content (id integer primary key asc";
             for (String str : strColumns){
                 query += ", "+str + " text";

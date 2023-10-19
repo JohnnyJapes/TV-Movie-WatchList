@@ -6,6 +6,8 @@ import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
 
 import java.io.IOException;
+import java.sql.*;
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -16,7 +18,7 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class Movie extends ContentBase implements TMDBcompatible {
 
-    private final String contentType = "Movie";
+    private final int contentType = 1; //1 for movies, 2 for TV shows
     private Person director;
 
     public Movie(){
@@ -42,13 +44,14 @@ public class Movie extends ContentBase implements TMDBcompatible {
     }
 
     /**
-     * Gets contentType.
+     * Gets contentType. 1 is a Movie, 2 is a TV show
      *
      * @return java.lang.String, value of contentType
      */
-    public String getContentType() {
+    public int getContentType() {
         return contentType;
     }
+
 
     /**
      * Gets director.
@@ -354,6 +357,55 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         }
     }
+    @Override
+    public void createRow(){
+        {
+            Connection connection = null;
+            try
+            {
+                // create a database connection
+                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdbID) values(?,?,?)");
+                statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
+                statement.setString(1,getTitle());
+                statement.setString(2,getOverview());
+                statement.setInt(3,getTmdbID());
+
+
+
+                statement.executeUpdate();
+                ResultSet rs = connection.createStatement().executeQuery("select * from content");
+                while(rs.next())
+                {
+                    // read the result set
+                    System.out.println("title = " + rs.getString("title"));
+                    System.out.println("id = " + rs.getInt("id"));
+                    System.out.println("overview = " + rs.getString("overview"));
+                    System.out.println("tmdbID = " + rs.getFloat("tmdbid"));
+                }
+            }
+            catch(SQLException e)
+            {
+                // if the error message is "out of memory",
+                // it probably means no database file is found
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    if(connection != null)
+                        connection.close();
+                }
+                catch(SQLException e)
+                {
+                    // connection close failed.
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+    }
 
 }
