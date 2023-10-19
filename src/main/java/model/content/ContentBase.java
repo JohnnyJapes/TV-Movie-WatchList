@@ -1,10 +1,14 @@
 package model.content;
 
 import model.Person.Person;
+import org.w3c.dom.ls.LSOutput;
 
+import javax.crypto.spec.PSource;
 import java.sql.*;
+import java.text.Format;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Formatter;
 
 public class ContentBase {
 
@@ -289,5 +293,13 @@ public class ContentBase {
                 }
             }
         }
+    }
+    public String getDetails(){
+        String str = String.format("Title: %s\nOverview: %s\nRelease Date: %s", title, overview, releaseDate);
+
+
+        return str;
+
+
     }
 }

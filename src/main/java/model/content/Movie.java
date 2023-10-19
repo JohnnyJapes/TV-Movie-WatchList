@@ -189,7 +189,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_NUMBER_INT) {
-                    System.out.println("ID : " + parser.getIntValue());
+                   // System.out.println("ID : " + parser.getIntValue());
                     this.setTmdbID(parser.getIntValue());
                 }
             }
@@ -197,7 +197,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             if (token == JsonToken.FIELD_NAME && "original_title".equals(parser.getCurrentName())) {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
-                    System.out.println("original_title : " + parser.getText());
+                 //   System.out.println("original_title : " + parser.getText());
                     this.setTitle(parser.getText());
                 }
             }
@@ -205,7 +205,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             if (token == JsonToken.FIELD_NAME && "overview".equals(parser.getCurrentName())) {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
-                    System.out.println("overview : " + parser.getText());
+                   // System.out.println("overview : " + parser.getText());
                     this.setOverview(parser.getText());
                 }
             }
@@ -213,7 +213,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             if (token == JsonToken.FIELD_NAME && "release_date".equals(parser.getCurrentName())) {
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
-                    System.out.println("release_date : " + parser.getText());
+                 //   System.out.println("release_date : " + parser.getText());
                     LocalDate releaseDate = LocalDate.parse(parser.getText());
                     this.setReleaseDate(releaseDate);
                 }

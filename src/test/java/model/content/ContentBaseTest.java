@@ -18,4 +18,11 @@ class ContentBaseTest {
         temp.createTable();
     }
 
+    @Test
+    void getDetails() {
+        ContentBase temp;
+        Movie movie = new Movie(680);
+        temp = movie;
+        System.out.println(temp.getDetails());
+    }
 }

@@ -1,5 +1,7 @@
 
 import model.Person.Person;
+import model.TMDBcompatible;
+import model.content.Movie;
 
 import java.util.ArrayList;
 
@@ -59,6 +61,16 @@ public static void main(String args[]){
             e.printStackTrace();
 
         }
+
+
+
+    }
+    public void testInterface(){
+        ArrayList<TMDBcompatible> interfaceTester = new ArrayList<TMDBcompatible>();
+        interfaceTester.add(new Movie(680));
+
+
+
 
 
 
