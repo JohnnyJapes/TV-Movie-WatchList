@@ -40,7 +40,8 @@ public class Movie extends ContentBase implements TMDBcompatible {
         this.director = director;
     }
     public Movie(int tmdbID){
-    getTMDBdetails(tmdbID);
+        super();
+        getTMDBdetails(tmdbID);
     }
 
     /**
@@ -90,7 +91,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         try {
             Response response = client.newCall(request).execute();
             // De-serialize to an movie object
-
+            System.out.println("Movie Search Results ----------------------------");
             JsonFactory factory = new JsonFactory();
             JsonParser parser = factory.createParser(response.body().string());
             JsonToken token = parser.nextToken();
@@ -148,7 +149,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             }
             //close the parser
             parser.close();
-
+            System.out.println("Results End -----------------------------");
 
 
         }
@@ -231,6 +232,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
         addCast();
         addDirector();
+        System.out.println("Movie Title: " + this.getTitle() + "\n");
     }
     public void addCast(){
         OkHttpClient client = new OkHttpClient();

@@ -14,6 +14,7 @@ class TVTest {
         TV tempTV = new TV();
         tempTV.getTMDBdetails(1920);
         assertEquals(1920, tempTV.getTmdbID() );
+        System.out.println(tempTV.getDetails());
         tempTV = new TV(1950);
         assertEquals(1950, tempTV.getTmdbID() );
     }
