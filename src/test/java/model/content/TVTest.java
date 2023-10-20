@@ -42,4 +42,16 @@ class TVTest {
         tempTV.addCreators();
         assertEquals("Greg Berlanti", tempTV.getCreators().get(0).getName() );
     }
+    @Test
+    void getDetails(){
+        TV tempTV = new TV();
+        tempTV.getTMDBdetails(1920);
+        System.out.println(tempTV.getDetails());
+        assertEquals("TV Show Details:\n" +
+                "Title: Twin Peaks\n" +
+                "Overview: The body of Laura Palmer is washed up on a beach near the small Washington state town of Twin Peaks. FBI Special Agent Dale Cooper is called in to investigate her strange demise only to uncover a web of mystery that ultimately leads him deep into the heart of the surrounding woodland and his very own soul.\n" +
+                "Release Date: 1990-04-08\n" +
+                "Creators: David Lynch, Mark Frost\n" +
+                "Total Episodes: 48", tempTV.getDetails());
+    }
 }

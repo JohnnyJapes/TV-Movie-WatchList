@@ -244,8 +244,16 @@ public class TV extends ContentBase implements TMDBcompatible {
                             tempTV.setTmdbID(parser.getIntValue());
                         }
                     }
-                    while (!"original_name".equals(parser.getCurrentName())) token = parser.nextToken();
-                    if (token == JsonToken.FIELD_NAME && "original_name".equals(parser.getCurrentName())) {
+                    while (!"number_of_episodes".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "number_of_episodes".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_NUMBER_INT) {
+                            System.out.println("Total Episodes : " + parser.getIntValue());
+                            tempTV.setTotalEpisodes(parser.getIntValue());
+                        }
+                    }
+                    while (!"number_of_episodes".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "number_of_episodes".equals(parser.getCurrentName())) {
                         token = parser.nextToken();
                         if (token == JsonToken.VALUE_STRING) {
                             System.out.println("original_name : " + parser.getText());
@@ -446,4 +454,19 @@ public class TV extends ContentBase implements TMDBcompatible {
 
         }
     }
+
+    @Override
+    public String getDetails(){
+        String str = "TV Show Details:\n";
+        str += super.getDetails();
+        str += "\nCreators: ";
+        for (int i = 0; i < creators.size(); i++){
+            if (creators.size() - i > 1) str += creators.get(i).getName() + ", ";
+            else str += creators.get(i).getName();
+        }
+        str += "\nTotal Episodes: " + totalEpisodes;
+        return str;
+
+    }
+
 }
