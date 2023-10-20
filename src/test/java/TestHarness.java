@@ -1,9 +1,11 @@
 
 import model.Person.Person;
 import model.TMDBcompatible;
+import model.content.ContentBase;
 import model.content.Movie;
 import model.content.TV;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TestHarness {
@@ -14,6 +16,7 @@ public static void main(String args[]){
 
     try {
         testInterface();
+        testClassHierarchy();
     }
     catch (Exception e){
         e.printStackTrace();
@@ -90,6 +93,20 @@ public static void main(String args[]){
         for (TMDBcompatible obj : interfaceTester){
             obj.searchTMDB("Scream");
         }
+    }
+    public void testClassHierarchy(){
+
+        ArrayList<ContentBase> content = new ArrayList<>();
+        content.add(new Movie(680));
+        content.add(new TV(1920));
+        System.out.println("Testing Class Hierarchy------------------------");
+        for (ContentBase test : content){
+            System.out.println(test.getDetails());
+            System.out.println("----------------------");
+        }
+        System.out.println("Class Hierarchy Test End ---------------------------");
+    }
+
 /*
 {
   "adult": false,
@@ -182,7 +199,7 @@ public static void main(String args[]){
 
 
 
-    }
+
 
 
 
