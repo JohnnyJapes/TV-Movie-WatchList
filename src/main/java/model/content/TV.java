@@ -244,16 +244,9 @@ public class TV extends ContentBase implements TMDBcompatible {
                             tempTV.setTmdbID(parser.getIntValue());
                         }
                     }
-                    while (!"number_of_episodes".equals(parser.getCurrentName())) token = parser.nextToken();
-                    if (token == JsonToken.FIELD_NAME && "number_of_episodes".equals(parser.getCurrentName())) {
-                        token = parser.nextToken();
-                        if (token == JsonToken.VALUE_NUMBER_INT) {
-                            System.out.println("Total Episodes : " + parser.getIntValue());
-                            tempTV.setTotalEpisodes(parser.getIntValue());
-                        }
-                    }
-                    while (!"number_of_episodes".equals(parser.getCurrentName())) token = parser.nextToken();
-                    if (token == JsonToken.FIELD_NAME && "number_of_episodes".equals(parser.getCurrentName())) {
+
+                    while (!"original_name".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "original_name".equals(parser.getCurrentName())) {
                         token = parser.nextToken();
                         if (token == JsonToken.VALUE_STRING) {
                             System.out.println("original_name : " + parser.getText());
