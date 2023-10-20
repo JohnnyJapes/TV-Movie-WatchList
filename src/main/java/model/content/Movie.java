@@ -410,4 +410,13 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
     }
 
+    @Override
+    public String getDetails(){
+        String str = "Movie Details:\n";
+        str += super.getDetails();
+        str += "\nDirector: "+ director.getName();
+        return str;
+
+    }
+
 }

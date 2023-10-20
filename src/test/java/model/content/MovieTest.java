@@ -44,4 +44,12 @@ class MovieTest {
         ArrayList<Movie> results = (ArrayList<Movie>) tempMovie.searchTMDB("Pulp Fiction");
         assertEquals("Pulp Fiction", results.get(0).getTitle());
     }
+
+    @Test
+    void getDetails(){
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
+
+        System.out.println(tempMovie.getDetails());
+    }
 }
