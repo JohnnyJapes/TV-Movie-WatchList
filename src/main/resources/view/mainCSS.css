@@ -1,0 +1,12 @@
+.ButtonBar{
+	-fx-background-color: #154C79;
+	
+}
+
+.navButton{
+	-fx-background-color: #154C79;
+	-fx-text-fill: white;
+}
+.navButton:hover{
+	-fx-background-color: black;
+}
