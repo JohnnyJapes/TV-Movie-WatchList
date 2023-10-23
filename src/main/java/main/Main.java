@@ -21,11 +21,13 @@ public class Main extends Application {
         MainController controller = fxmlLoader.getController();
         ContentList temp = new ContentList();
         Movie pulp = new Movie(680);
-        //pulp.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
-        //pulp.createRow();
+        //pulp.readRow(6);
+        pulp.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        pulp.createRow();
         temp.getListEntries().add(new ListEntry(pulp, 1));
         temp.getListEntries().add(new ListEntry(new Movie(1210), 2));
         controller.setCurrentList(temp);
+        controller.setPoster(pulp.getImage() );
 
         System.out.println("Tv-Movie-Watchlist");
         //Movie.searchTMDB("Pulp Fiction");
