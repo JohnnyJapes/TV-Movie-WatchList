@@ -1,18 +1,14 @@
 package model.content;
 
 import model.Person.Person;
-import org.w3c.dom.ls.LSOutput;
 
-import javax.crypto.spec.PSource;
 import java.sql.*;
-import java.text.Format;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Formatter;
 
 public class ContentBase {
 
-    protected String title, overview, imageLocation; //imageLocation might be a URL or a filepath, currently undecided how images will be handled
+    protected String title, overview, imageURL; //imageLocation is URL, currently undecided how images will be handled, local image location is constructed with id
     //ID should refer to a local database ID
     private int tmdbID, ID;    //ID should refer to a local database ID
     private LocalDate releaseDate;
@@ -31,7 +27,7 @@ public class ContentBase {
     public ContentBase(String title, String overview, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast) {
         this.title = title;
         this.overview = overview;
-        this.imageLocation = imageLocation;
+        this.imageURL = imageLocation;
         this.tmdbID = tmdbID;
         this.ID = ID;
         this.releaseDate = releaseDate;
@@ -181,17 +177,17 @@ public class ContentBase {
      *
      * @return java.lang.String, value of imageLocation
      */
-    public String getImageLocation() {
-        return imageLocation;
+    public String getImageURL() {
+        return imageURL;
     }
 
     /**
      * Method to set imageLocation.
      *
-     * @param imageLocation java.lang.String - imageLocation
+     * @param imageURL java.lang.String - imageLocation
      */
-    public void setImageLocation(String imageLocation) {
-        this.imageLocation = imageLocation;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
 
@@ -206,8 +202,8 @@ public class ContentBase {
 
             statement.executeUpdate("drop table if exists content");
 
-            String[] strColumns = {"title","overview","imagelocation", "releaseDate"};
-            String[] intColumns = {"tmdbID, contentType"};
+            String[] strColumns = {"title","overview","image_url", "releaseDate"};
+            String[] intColumns = {"tmdb_id, content_type", "total_episodes", "watched_episodes"};
             String[] decimalColumns = {"tmdbRating"};
             String query = "create table if not exists content (id integer primary key asc";
             for (String str : strColumns){
