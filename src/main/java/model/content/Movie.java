@@ -5,9 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.sql.*;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -74,6 +72,36 @@ public class Movie extends ContentBase implements TMDBcompatible {
      */
     public void setDirector(Person director) {
         this.director = director;
+    }
+
+    /**
+     * Method returns a file input stream for use to display the local image
+     * @return
+     */
+    public FileInputStream getImage(){
+        try {
+            return new FileInputStream("images/"+getID()+"/poster.jpg");
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            makeImageLocal();
+            //try again after making a local image
+           return getImage(1);
+        }
+    }
+
+    /**
+     * Method returns a file input stream for use to display the local image, if failing, throws exception
+     * @param count - indicates method has failed once
+     * @return
+     */
+    private FileInputStream getImage(int count){
+
+        try {
+            return new FileInputStream("images/"+getID()+"/poster.jpg");
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -398,7 +426,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                     System.out.println("overview = " + rs.getString("overview"));
                     System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 }
-                //makeImageLocal();
+                makeImageLocal();
             }
             catch(SQLException e)
             {
@@ -456,6 +484,8 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 setOverview(rs.getString("overview"));
                 System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 setTmdbID((int) rs.getFloat("tmdb_id"));
+                setImageURL(rs.getString("image_url"));
+                watched = rs.getInt("watched_episodes");
 
             }
             //makeImageLocal();
@@ -504,7 +534,14 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         try{
             Response response = client.newCall(request).execute();
-            OutputStream out = new FileOutputStream("./images/"+getID()+"/poster.jpg");
+            String path = "images/"+getID()+"/";
+
+            File img = new File(path);
+            img.mkdirs();
+            path += "poster.jpg";
+
+            img.createNewFile();
+            OutputStream out = new FileOutputStream(path);
             out.write(response.body().bytes());
         }
         catch (IOException e) {

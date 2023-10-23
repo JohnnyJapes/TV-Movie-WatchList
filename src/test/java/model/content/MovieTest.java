@@ -66,8 +66,10 @@ class MovieTest {
     @Test
     void makeImageLocal(){
         Movie tempMovie = new Movie();
-        tempMovie.getTMDBdetails(680);
-        tempMovie.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        //tempMovie.getTMDBdetails(680);
+        //tempMovie.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        tempMovie.readRow(6);
+        tempMovie.makeImageLocal();
 
     }
 }
