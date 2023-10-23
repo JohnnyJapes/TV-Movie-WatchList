@@ -15,8 +15,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 620, 640);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Watchlist");
+        stage.setResizable(false);
         stage.setScene(scene);
         MainController controller = fxmlLoader.getController();
         ContentList temp = new ContentList();

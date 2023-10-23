@@ -552,7 +552,8 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

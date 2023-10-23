@@ -62,4 +62,10 @@ public class ListEntry {
     public void deleteRow(){
 
     }
+
+    @Override
+    public String toString() {
+        return listRank + ". " + entry.getTitle();
+
+    }
 }

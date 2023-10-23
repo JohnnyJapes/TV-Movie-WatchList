@@ -298,4 +298,9 @@ public class ContentBase {
 
 
     }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
