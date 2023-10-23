@@ -131,6 +131,7 @@ public class TV extends ContentBase implements TMDBcompatible {
 
         try {
             Response response = client.newCall(request).execute();
+            if(response.code() != 200) throw new Error(response.code() + " Request error");
             // De-serialize to an movie object
             System.out.println("start TV Details");
             JsonFactory factory = new JsonFactory();
@@ -228,13 +229,12 @@ public class TV extends ContentBase implements TMDBcompatible {
             while(!"results".equals(parser.getCurrentName())) token = parser.nextToken();
             if (token == JsonToken.FIELD_NAME && "results".equals(parser.getCurrentName())) {
                 //System.out.println("Cast - \n");
-                token = parser.nextToken();
-                token = parser.nextToken();
-                token = parser.nextToken();// // Read left bracket i.e. [
+                token = parser.nextToken(); // Read left bracket i.e. [
                 // Loop to print array elements until right bracket i.e ]
                 for (int i = 0; i < 7; i++) {
+                    if (token == JsonToken.END_ARRAY) break;
                     TV tempTV = new TV();
-                    parser.nextToken();
+                    token = parser.nextToken();
                     if (token == JsonToken.END_ARRAY) break;
                     while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
                     if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {

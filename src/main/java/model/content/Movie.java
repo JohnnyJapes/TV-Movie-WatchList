@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.sql.*;
 import java.sql.Connection;
 import java.time.LocalDate;
@@ -20,10 +22,12 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     private final int contentType = 1; //1 for movies, 2 for TV shows
     private Person director;
+    protected int watched;
 
     public Movie(){
         super();
         director = new Person();
+        watched = 0;
     }
 
     public Movie(Person director) {
@@ -99,13 +103,12 @@ public class Movie extends ContentBase implements TMDBcompatible {
             while(!"results".equals(parser.getCurrentName())) token = parser.nextToken();
             if (token == JsonToken.FIELD_NAME && "results".equals(parser.getCurrentName())) {
                 //System.out.println("Cast - \n");
-                token = parser.nextToken();
-                token = parser.nextToken();
-                token = parser.nextToken();// // Read left bracket i.e. [
+                token = parser.nextToken(); // Read left bracket i.e. [
                 // Loop to print array elements until right bracket i.e ]
                 for (int i = 0; i < 7; i++) {
+                    if (token == JsonToken.END_ARRAY) break;
                     Movie tempMovie = new Movie();
-                    parser.nextToken();
+                    token = parser.nextToken();
                     if (token == JsonToken.END_ARRAY) break;
                     while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
                     if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
@@ -179,6 +182,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         try {
             Response response = client.newCall(request).execute();
+            if(response.code() != 200) throw new Error(response.code() + " Request error");
             // De-serialize to an movie object
 
             JsonFactory factory = new JsonFactory();
@@ -227,6 +231,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
         catch(Error | IOException e){
             System.out.println(e);
+            return;
            // e.printStackTrace();
 
         }
@@ -365,27 +370,35 @@ public class Movie extends ContentBase implements TMDBcompatible {
             Connection connection = null;
             try
             {
+
                 // create a database connection
                 connection = DriverManager.getConnection("jdbc:sqlite:local.db");
-                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdbID) values(?,?,?)");
+                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
+                        " values(?,?,?,?,?,?,?)");
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
                 statement.setString(1,getTitle());
                 statement.setString(2,getOverview());
                 statement.setInt(3,getTmdbID());
+                statement.setInt(4,getContentType());
+                statement.setInt(5,1);
+                statement.setInt(6,0);
+                statement.setString(7,getImageURL());
 
 
 
                 statement.executeUpdate();
-                ResultSet rs = connection.createStatement().executeQuery("select * from content");
+                ResultSet rs = connection.createStatement().executeQuery("select * from content order by id desc limit 1");
                 while(rs.next())
                 {
                     // read the result set
                     System.out.println("title = " + rs.getString("title"));
                     System.out.println("id = " + rs.getInt("id"));
+                    setID(rs.getInt("id"));
                     System.out.println("overview = " + rs.getString("overview"));
-                    System.out.println("tmdbID = " + rs.getFloat("tmdbid"));
+                    System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 }
+                //makeImageLocal();
             }
             catch(SQLException e)
             {
@@ -410,6 +423,66 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
     }
 
+    /**
+     * Reads from local database and applies to local object
+     * @param id
+     */
+    public void readRow(int id){
+        Connection connection = null;
+        try
+        {
+
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
+            //        " values(?,?,?,?,?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("select * from content where id=?");
+            statement.setInt(1,id);
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+
+
+           // statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            while(rs.next())
+            {
+                // read the result set
+                System.out.println("title = " + rs.getString("title"));
+                setTitle(rs.getString("title"));
+                System.out.println("id = " + rs.getInt("id"));
+                setID(rs.getInt("id"));
+                System.out.println("overview = " + rs.getString("overview"));
+                setOverview(rs.getString("overview"));
+                System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
+                setTmdbID((int) rs.getFloat("tmdb_id"));
+
+            }
+            //makeImageLocal();
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+    }
+
     @Override
     public String getDetails(){
         String str = "Movie Details:\n";
@@ -418,5 +491,31 @@ public class Movie extends ContentBase implements TMDBcompatible {
         return str;
 
     }
+
+    public void makeImageLocal(){
+        //URL url = new URL("https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        OkHttpClient client = new OkHttpClient();
+
+
+        Request request = new Request.Builder()
+                .url("https://image.tmdb.org/t/p/w500/"+ getImageURL())
+                .get()
+                .build();
+
+        try{
+            Response response = client.newCall(request).execute();
+            OutputStream out = new FileOutputStream("./images/"+getID()+"/poster.jpg");
+            out.write(response.body().bytes());
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        } {
+
+        }
+
+    }
+
+
+
 
 }

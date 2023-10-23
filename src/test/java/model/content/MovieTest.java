@@ -13,6 +13,9 @@ class MovieTest {
         Movie tempMovie = new Movie();
         tempMovie.getTMDBdetails(680);
         assertEquals(680, tempMovie.getTmdbID() );
+        Movie failMovie = new Movie();
+        failMovie.getTMDBdetails(1220);
+        assertEquals((Integer) 0, failMovie.getTmdbID());
 
     }
 
@@ -43,6 +46,7 @@ class MovieTest {
         Movie tempMovie = new Movie();
         ArrayList<Movie> results = (ArrayList<Movie>) tempMovie.searchTMDB("Pulp Fiction");
         assertEquals("Pulp Fiction", results.get(0).getTitle());
+        results = (ArrayList<Movie>) tempMovie.searchTMDB("asdf");
     }
 
     @Test
@@ -51,5 +55,19 @@ class MovieTest {
         tempMovie.getTMDBdetails(680);
 
         System.out.println(tempMovie.getDetails());
+    }
+    @Test
+    void createRow(){
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
+        tempMovie.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        tempMovie.createRow();
+    }
+    @Test
+    void makeImageLocal(){
+        Movie tempMovie = new Movie();
+        tempMovie.getTMDBdetails(680);
+        tempMovie.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+
     }
 }

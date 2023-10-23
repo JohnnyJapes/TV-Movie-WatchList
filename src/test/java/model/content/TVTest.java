@@ -54,4 +54,10 @@ class TVTest {
                 "Creators: David Lynch, Mark Frost\n" +
                 "Total Episodes: 48", tempTV.getDetails());
     }
+
+    @Test
+    void searchTMDB(){
+        TV tempTV = new TV();
+        ArrayList<TV> results = (ArrayList<TV>)         tempTV.searchTMDB("asdf");
+    }
 }
