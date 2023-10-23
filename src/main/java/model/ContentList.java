@@ -8,6 +8,7 @@ public class ContentList {
 
     private ArrayList<ListEntry> listEntries; // holds list entries which link to contentBase
     private String listName;
+    private int id;
 
     public ContentList(){
         listName = "Watching";
