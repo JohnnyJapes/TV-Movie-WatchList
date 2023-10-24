@@ -2,6 +2,7 @@ package controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +18,14 @@ public class MainController {
     ListView<ListEntry> currentList;
     @FXML
     ImageView poster;
+    @FXML
+    Label titleLabel;
+    @FXML
+    public void getSelectedItem(){
+        ListEntry selected =  currentList.getSelectionModel().getSelectedItem();
+        titleLabel.setText(selected.getEntry().getTitle());
+        setPoster(selected.getEntry().getImage());
+    }
 
     public void setCurrentList(ContentList list){
         for (ListEntry ent : list.getListEntries()){
@@ -30,4 +39,12 @@ public class MainController {
         poster.setImage(image);
 
     }
+    public void setTitle(String str){
+        titleLabel.setText(str);
+    }
+
+    public void setDetailView(ListEntry entry){
+
+    }
+
 }

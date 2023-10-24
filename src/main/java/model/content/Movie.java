@@ -74,35 +74,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         this.director = director;
     }
 
-    /**
-     * Method returns a file input stream for use to display the local image
-     * @return
-     */
-    public FileInputStream getImage(){
-        try {
-            return new FileInputStream("images/"+getID()+"/poster.jpg");
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            makeImageLocal();
-            //try again after making a local image
-           return getImage(1);
-        }
-    }
 
-    /**
-     * Method returns a file input stream for use to display the local image, if failing, throws exception
-     * @param count - indicates method has failed once
-     * @return
-     */
-    private FileInputStream getImage(int count){
-
-        try {
-            return new FileInputStream("images/"+getID()+"/poster.jpg");
-        } catch (FileNotFoundException e) {
-            System.out.println(e);
-            throw new RuntimeException(e);
-        }
-    }
 
 
     public Object searchTMDB(String title){
@@ -522,35 +494,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     }
 
-    public void makeImageLocal(){
-        //URL url = new URL("https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
-        OkHttpClient client = new OkHttpClient();
 
-
-        Request request = new Request.Builder()
-                .url("https://image.tmdb.org/t/p/w500/"+ getImageURL())
-                .get()
-                .build();
-
-        try{
-            Response response = client.newCall(request).execute();
-            String path = "images/"+getID()+"/";
-
-            File img = new File(path);
-            img.mkdirs();
-            path += "poster.jpg";
-
-            img.createNewFile();
-            OutputStream out = new FileOutputStream(path);
-            out.write(response.body().bytes());
-        }
-        catch (IOException e) {
-            throw new RuntimeException(e);
-        } {
-
-        }
-
-    }
 
     @Override
     public String toString() {

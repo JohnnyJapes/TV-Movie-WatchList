@@ -8,7 +8,6 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -39,7 +38,7 @@
    <left>
       <SplitPane dividerPositions="0.1820250284414107" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="891.0" BorderPane.alignment="CENTER">
         <items>
-            <ListView fx:id="currentList" prefHeight="200.0" prefWidth="200.0" />
+            <ListView fx:id="currentList" onMouseClicked="#getSelectedItem" prefHeight="200.0" prefWidth="200.0" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <ImageView fx:id="poster" fitHeight="300.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
@@ -49,11 +48,24 @@
                   </ImageView>
                   <VBox prefHeight="632.0" prefWidth="514.0">
                      <children>
-                        <FlowPane prefHeight="200.0" prefWidth="200.0">
+                        <HBox alignment="CENTER">
                            <children>
-                              <Label text="Label" />
+                              <Label fx:id="titleLabel" text="Label">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
                            </children>
-                        </FlowPane>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0">
+                           <children>
+                              <Label fx:id="titleLabel1" text="Label">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
                      </children>
                   </VBox>
                </children>

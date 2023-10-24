@@ -28,7 +28,8 @@ public class Main extends Application {
         temp.getListEntries().add(new ListEntry(pulp, 1));
         temp.getListEntries().add(new ListEntry(new Movie(1210), 2));
         controller.setCurrentList(temp);
-        controller.setPoster(pulp.getImage() );
+        //controller.setPoster(pulp.getImage() );
+        //controller.setTitle(pulp.getTitle());
 
         System.out.println("Tv-Movie-Watchlist");
         //Movie.searchTMDB("Pulp Fiction");
