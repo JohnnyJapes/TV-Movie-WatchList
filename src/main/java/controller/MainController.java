@@ -2,6 +2,7 @@ package controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -44,6 +45,10 @@ public class MainController {
     }
 
     public void setDetailView(ListEntry entry){
+
+    }
+
+    public void openNewItem(){
 
     }
 
