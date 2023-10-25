@@ -10,3 +10,8 @@
 .navButton:hover{
 	-fx-background-color: black;
 }
+
+.addContent{
+	-fx-background-color: #154C79;
+	-fx-text-fill: white;
+}

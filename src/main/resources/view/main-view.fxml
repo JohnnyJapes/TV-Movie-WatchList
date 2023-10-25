@@ -19,7 +19,7 @@
    <top>
       <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css" BorderPane.alignment="CENTER">
         <buttons>
-            <Button alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
+            <Button alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -29,7 +29,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
+            <Button alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -40,7 +40,16 @@
    <left>
       <SplitPane dividerPositions="0.1820250284414107" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="891.0" BorderPane.alignment="CENTER">
         <items>
-            <ListView fx:id="currentList" onMouseClicked="#getSelectedItem" prefHeight="200.0" prefWidth="200.0" />
+            <VBox>
+               <children>
+                  <ListView fx:id="currentList" onMouseClicked="#getSelectedItem" prefHeight="585.0" prefWidth="159.0" />
+                  <HBox alignment="CENTER" prefHeight="47.0" prefWidth="159.0">
+                     <children>
+                        <Button fx:id="addItem" alignment="CENTER" mnemonicParsing="false" onAction="#addListItem" styleClass="addContent" stylesheets="@mainCSS.css" text="Add List Item" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                <children>
                   <ImageView fx:id="poster" fitHeight="300.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
