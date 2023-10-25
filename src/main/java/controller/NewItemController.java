@@ -21,7 +21,7 @@ public class NewItemController {
     public void setTmdbImage() {
         this.tmdbImage =new ImageView();
         try {
-            FileInputStream input = new FileInputStream("images/shortTMDB.svg");
+            FileInputStream input = new FileInputStream("attribution/shortTMDB.svg");
             Image image = new Image(input);
             tmdbImage.setImage(image);
 
