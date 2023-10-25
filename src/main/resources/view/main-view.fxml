@@ -45,7 +45,7 @@
                   <ListView fx:id="currentList" onMouseClicked="#getSelectedItem" prefHeight="585.0" prefWidth="159.0" />
                   <HBox alignment="CENTER" prefHeight="47.0" prefWidth="159.0">
                      <children>
-                        <Button fx:id="addItem" alignment="CENTER" mnemonicParsing="false" onAction="#addListItem" styleClass="addContent" stylesheets="@mainCSS.css" text="Add List Item" />
+                        <Button fx:id="addItem" alignment="CENTER" mnemonicParsing="false" onAction="#openNewItem" styleClass="addContent" stylesheets="@mainCSS.css" text="Add List Item" />
                      </children>
                   </HBox>
                </children>

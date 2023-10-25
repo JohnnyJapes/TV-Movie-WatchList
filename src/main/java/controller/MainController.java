@@ -3,14 +3,20 @@ package controller;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import main.HelloApplication;
 import model.ContentList;
 import model.ListEntry;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 
 public class MainController {
 
@@ -48,7 +54,22 @@ public class MainController {
 
     }
 
-    public void openNewItem(){
+   @FXML
+   public void openNewItem() throws IOException {
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("TV-Movie Watchlists");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root1));
+            stage.show();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
 
     }
 

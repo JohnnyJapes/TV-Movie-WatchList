@@ -16,17 +16,18 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/main-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Watchlist");
+        stage.setTitle("TV-Movie Watchlists");
         stage.setResizable(false);
         stage.setScene(scene);
         MainController controller = fxmlLoader.getController();
         ContentList temp = new ContentList();
-        Movie pulp = new Movie(680);
-        //pulp.readRow(6);
-        pulp.setImageURL("/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
-        pulp.createRow();
+        Movie pulp = new Movie();
+        pulp.readRow(1);
+        Movie test2 = new Movie();
+        test2.readRow(2);
+        //pulp.createRow();
         temp.getListEntries().add(new ListEntry(pulp, 1));
-        temp.getListEntries().add(new ListEntry(new Movie(1210), 2));
+        temp.getListEntries().add(new ListEntry(test2, 2));
         controller.setCurrentList(temp);
         //controller.setPoster(pulp.getImage() );
         //controller.setTitle(pulp.getTitle());

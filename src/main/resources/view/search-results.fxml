@@ -4,10 +4,9 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SearchResultsController">
    <children>
       <ListView fx:id="searchList" onMouseClicked="#onClickSearchList" prefHeight="444.0" prefWidth="339.0" />
-      <Button mnemonicParsing="false" text="Add Item" />
+      <Button fx:id="addButton" mnemonicParsing="false" onAction="#addSelectedItem" text="Add Item" />
    </children>
 </VBox>

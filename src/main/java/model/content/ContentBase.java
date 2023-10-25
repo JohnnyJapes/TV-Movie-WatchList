@@ -308,7 +308,7 @@ public class ContentBase {
 
 
         Request request = new Request.Builder()
-                .url("https://image.tmdb.org/t/p/w500/"+ getImageURL())
+                .url("https://image.tmdb.org/t/p/w500"+ getImageURL())
                 .get()
                 .build();
 
@@ -336,6 +336,7 @@ public class ContentBase {
      * @return
      */
     public FileInputStream getImage(){
+        System.out.println("Getting image, ID: " + getID());
         try {
             return new FileInputStream("images/"+getID()+"/poster.jpg");
         } catch (FileNotFoundException e) {
@@ -353,6 +354,7 @@ public class ContentBase {
      */
     private FileInputStream getImage(int count){
 
+
         try {
             return new FileInputStream("images/"+getID()+"/poster.jpg");
         } catch (FileNotFoundException e) {
@@ -363,6 +365,6 @@ public class ContentBase {
 
     @Override
     public String toString() {
-        return title;
+        return title + " (" + releaseDate.getYear()+") \n " + overview.substring(0, 40) + "...";
     }
 }
