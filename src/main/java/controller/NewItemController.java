@@ -18,9 +18,7 @@ import java.util.ArrayList;
 
 public class NewItemController {
 
-/*    public NewItemController(){
-        setTmdbImage();
-    }*/
+
     @FXML
     ImageView tmdbImage;
     @FXML
@@ -32,7 +30,13 @@ public class NewItemController {
     @FXML
     RadioButton movieRadio, tvRadio;
 
+    final ToggleGroup group = new ToggleGroup();
 
+/*    public NewItemController(){
+        movieRadio.setToggleGroup(group);
+        movieRadio.setSelected(true);
+        tvRadio.setToggleGroup(group);
+    }*/
     /**
      * Method sets up TMDB image to comply with attribution
      *
