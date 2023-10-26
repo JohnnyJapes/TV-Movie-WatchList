@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import model.TMDBcompatible;
+import model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 import org.apache.commons.text.StringEscapeUtils;
@@ -37,7 +38,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         this.director = director;
     }
 
-    public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast, Person director) {
+    public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast, Person director) {
         super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.director = director;
     }
@@ -272,7 +273,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             token = parser.nextToken();// // Read left bracket i.e. [
             // Loop to print array elements until right bracket i.e ]
             for (int i = 0; i < 7; i++){
-                Person tempPerson = new Person();
+                CastMember tempPerson = new CastMember();
                 parser.nextToken();
                 if (token == JsonToken.END_ARRAY) break;
                 while(!"gender".equals(parser.getCurrentName())) token = parser.nextToken();{
@@ -280,11 +281,19 @@ public class Movie extends ContentBase implements TMDBcompatible {
                         parser.nextToken();
                     //  if (token == JsonToken.VALUE_NUMBER_INT) {
                     switch (parser.getIntValue()) {
-                        case 1:tempPerson.setGender("female");
-                        case 2:tempPerson.setGender("male");
+                        case 1:tempPerson.getPerson().setGender("female");
+                        case 2:tempPerson.getPerson().setGender("male");
                     }
                     //       System.out.println("Gender:"+parser.getIntValue());
                     token = parser.nextToken();
+                }
+                while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
+                if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_NUMBER_INT) {
+                        // System.out.println("ID : " + parser.getIntValue());
+                        tempPerson.getPerson().setTmdbID(parser.getIntValue());
+                    }
                 }
                 //}
                 while(!"known_for_department".equals(parser.getCurrentName())) token = parser.nextToken();
@@ -292,19 +301,44 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 token = parser.nextToken();
                 // if (token == JsonToken.VALUE_STRING) {
                 //        System.out.println("department: "+parser.getText());
-                tempPerson.setKnownFor(parser.getText());
+                tempPerson.getPerson().setKnownFor(parser.getText());
 
                 // }
+
                 while(!"name".equals(parser.getCurrentName())) token = parser.nextToken();
 
                 token = parser.nextToken();
                 if (token == JsonToken.VALUE_STRING) {
                     //       System.out.println("Name: "+parser.getText());
-                    tempPerson.setName(parser.getText());
+                    tempPerson.getPerson().setName(parser.getText());
+                    token = parser.nextToken();
+                }
+                while (!"profile_path".equals(parser.getCurrentName())) token = parser.nextToken();
+                token = parser.nextToken();
+                if (token == JsonToken.VALUE_STRING) {
+                    //       System.out.println("Name: "+parser.getText());
+                    tempPerson.getPerson().setImageURL(parser.getText());
+                    token = parser.nextToken();
+                }
+                while(!"character".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                token = parser.nextToken();
+                if (token == JsonToken.VALUE_STRING) {
+                    //       System.out.println("Name: "+parser.getText());
+                    tempPerson.setCharacter(parser.getText());
+                    token = parser.nextToken();
+                }
+                while(!"order".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                token = parser.nextToken();
+                if (token == JsonToken.VALUE_NUMBER_INT) {
+                    //       System.out.println("Name: "+parser.getText());
+                    tempPerson.setOrder(parser.getIntValue());
                     token = parser.nextToken();
                 }
                 //System.out.println(parser.getCurrentName());
                 System.out.println();
+                tempPerson.setContent(this);
                 this.getCast().add(tempPerson);
             }
             System.out.println();
@@ -376,13 +410,13 @@ public class Movie extends ContentBase implements TMDBcompatible {
     public void createRow(){
         {
             Connection connection = null;
+            getDirector().createRow();
             try
             {
-
                 // create a database connection
                 connection = DriverManager.getConnection("jdbc:sqlite:local.db");
-                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
-                        " values(?,?,?,?,?,?,?)");
+                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url, releaseDate, director_id)" +
+                        " values(?,?,?,?,?,?,?,?,?)");
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
                 statement.setString(1,getTitle());
@@ -392,6 +426,8 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 statement.setInt(5,1);
                 statement.setInt(6,0);
                 statement.setString(7,getImageURL());
+                statement.setString(8, getReleaseDate().toString());
+                statement.setInt(9, getDirector().getID());
 
 
 
@@ -406,6 +442,10 @@ public class Movie extends ContentBase implements TMDBcompatible {
                     System.out.println("overview = " + rs.getString("overview"));
                     System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 }
+                for (int i = 0; i < 5; i++){
+                    getCast().get(i).createRow();
+                }
+
                 makeImageLocal();
             }
             catch(SQLException e)
@@ -449,8 +489,6 @@ public class Movie extends ContentBase implements TMDBcompatible {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
 
-
-
            // statement.executeQuery();
             ResultSet rs = statement.executeQuery();
             while(rs.next())
@@ -465,10 +503,37 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 setTmdbID((int) rs.getFloat("tmdb_id"));
                 setImageURL(rs.getString("image_url"));
+                setReleaseDate(rs.getString("releaseDate"));
+                Person temp = new Person();
+                temp.readRow(rs.getInt("director_id"));
+                setDirector(temp);
                 watched = rs.getInt("watched_episodes");
 
             }
             //makeImageLocal();
+            statement = connection.prepareStatement("select * from castmembers where content_id=?");
+            statement.setInt(1,this.getID());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            rs = statement.executeQuery();
+            while(rs.next())
+            {
+                CastMember member = new CastMember();
+                member.readRow(rs.getInt("id"));
+                member.setContent(this);
+                getCast().add(member);
+
+            }
+            statement = connection.prepareStatement("select * from castmembers where content_id=?");
+            statement.setInt(1,this.getID());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            rs = statement.executeQuery();
+
         }
         catch(SQLException e)
         {

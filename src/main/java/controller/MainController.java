@@ -14,9 +14,12 @@ import javafx.stage.Stage;
 import main.HelloApplication;
 import model.ContentList;
 import model.ListEntry;
+import model.content.Movie;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 public class MainController {
 
@@ -26,12 +29,29 @@ public class MainController {
     @FXML
     ImageView poster;
     @FXML
-    Label titleLabel;
+    Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel;
+    @FXML
+    ImageView castImage1;
     @FXML
     public void getSelectedItem(){
-        ListEntry selected =  currentList.getSelectionModel().getSelectedItem();
-        titleLabel.setText(selected.getEntry().getTitle());
-        setPoster(selected.getEntry().getImage());
+        Movie selected =  (Movie) currentList.getSelectionModel().getSelectedItem().getEntry();
+        titleLabel.setText(selected.getTitle());
+        setPoster(selected.getImage());
+        directorLabel.setText(selected.getDirector().getName());
+        yearLabel.setText(Integer.toString(selected.getReleaseDate().getYear()));
+        overviewLabel.setText(selected.getOverview());
+        characterLabel.setText(selected.getCast().get(0).getCharacter());
+        actorLabel.setText(selected.getCast().get(0).getPerson().getName());
+        OkHttpClient client = new OkHttpClient();
+        Image image = new Image(selected.getCast().get(0).getPerson().getImage());
+        castImage1 = new ImageView();
+        castImage1.setImage(image);
+
+
+
+
+
+
     }
 
     public void setCurrentList(ContentList list){
@@ -70,6 +90,27 @@ public class MainController {
             e.printStackTrace();
         }
 
+
+    }
+    @FXML
+    public void editButtonClicked() throws IOException{
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("TV-Movie Watchlists");
+            stage.setResizable(false);
+            stage.setScene(new Scene(root1));
+            stage.show();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+    @FXML
+    public void deleteButtonClicked() throws IOException{
 
     }
 

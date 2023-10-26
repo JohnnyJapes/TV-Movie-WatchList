@@ -1,6 +1,7 @@
 package model.content;
 
 import model.Person.Person;
+import model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -17,10 +18,10 @@ public class ContentBase {
     private int tmdbID, ID;    //ID should refer to a local database ID
     private LocalDate releaseDate;
     private float userRating;
-    private ArrayList<Person> cast;
+    private ArrayList<CastMember> cast;
 
     public ContentBase() {
-        cast = new ArrayList<Person>();
+        cast = new ArrayList<CastMember>();
     }
 
     public ContentBase(int ID){
@@ -28,7 +29,7 @@ public class ContentBase {
 
     }
 
-    public ContentBase(String title, String overview, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast) {
+    public ContentBase(String title, String overview, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast) {
         this.title = title;
         this.overview = overview;
         this.imageURL = imageLocation;
@@ -163,7 +164,7 @@ public class ContentBase {
      *
      * @return java.util.ArrayList<model.Person.Person>, value of cast
      */
-    public ArrayList<Person> getCast() {
+    public ArrayList<CastMember> getCast() {
         return cast;
     }
 
@@ -172,7 +173,7 @@ public class ContentBase {
      *
      * @param cast java.util.ArrayList<model.Person.Person> - cast
      */
-    public void setCast(ArrayList<Person> cast) {
+    public void setCast(ArrayList<CastMember> cast) {
         this.cast = cast;
     }
 
@@ -207,7 +208,7 @@ public class ContentBase {
             statement.executeUpdate("drop table if exists content");
 
             String[] strColumns = {"title","overview","image_url", "releaseDate"};
-            String[] intColumns = {"tmdb_id, content_type", "total_episodes", "watched_episodes"};
+            String[] intColumns = {"tmdb_id, content_type", "total_episodes", "watched_episodes, director_id"};
             String[] decimalColumns = {"tmdbRating"};
             String query = "create table if not exists content (id integer primary key asc";
             for (String str : strColumns){
@@ -326,8 +327,6 @@ public class ContentBase {
         }
         catch (IOException e) {
             throw new RuntimeException(e);
-        } {
-
         }
 
     }

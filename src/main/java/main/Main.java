@@ -21,6 +21,7 @@ public class Main extends Application {
         stage.setScene(scene);
         MainController controller = fxmlLoader.getController();
         ContentList temp = new ContentList();
+        new RefreshDatabase();
         Movie pulp = new Movie();
         pulp.readRow(1);
         Movie test2 = new Movie();

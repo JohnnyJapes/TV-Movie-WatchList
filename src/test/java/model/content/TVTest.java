@@ -22,13 +22,13 @@ class TVTest {
     @Test
     void addCast() {
         TV tempTV = new TV(1920);
-        tempTV.setCast(new ArrayList<Person>());
+        tempTV.setCast(new ArrayList<>());
         tempTV.addCast();
-        assertEquals("Kyle MacLachlan", tempTV.getCast().get(0).getName() );
+        assertEquals("Kyle MacLachlan", tempTV.getCast().get(0).getPerson().getName() );
         tempTV = new TV(1950);
-        tempTV.setCast(new ArrayList<Person>());
+        tempTV.setCast(new ArrayList<>());
         tempTV.addCast();
-        assertEquals("Gregory Smith", tempTV.getCast().get(1).getName() );
+        assertEquals("Gregory Smith", tempTV.getCast().get(1).getPerson().getName() );
     }
 
     @Test

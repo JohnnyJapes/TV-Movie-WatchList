@@ -23,10 +23,10 @@ class MovieTest {
     void addCast(){
         Movie tempMovie = new Movie();
         tempMovie.getTMDBdetails(680);
-        tempMovie.setCast(new ArrayList<Person>());
+        tempMovie.setCast(new ArrayList<>());
         tempMovie.addCast();
-        assertEquals("Uma Thurman", tempMovie.getCast().get(2).getName());
-        assertEquals("John Travolta", tempMovie.getCast().get(0).getName());
+        assertEquals("Uma Thurman", tempMovie.getCast().get(2).getPerson().getName());
+        assertEquals("John Travolta", tempMovie.getCast().get(0).getPerson().getName());
 
     }
 

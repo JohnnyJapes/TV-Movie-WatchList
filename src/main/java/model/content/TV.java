@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
 import model.TMDBcompatible;
+import model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -47,7 +48,7 @@ public class TV extends ContentBase implements TMDBcompatible {
         this.creators = creators;
     }
 
-    public TV(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<Person> cast, int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
+    public TV(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast, int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
         super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
@@ -319,7 +320,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                 token = parser.nextToken();// // Read left bracket i.e. [
                 // Loop to print array elements until right bracket i.e ]
                 for (int i = 0; i < 7; i++){
-                    Person tempPerson = new Person();
+                    CastMember tempPerson = new CastMember();
                     parser.nextToken();
                     if (token == JsonToken.END_ARRAY) break;
                     while(!"gender".equals(parser.getCurrentName())) token = parser.nextToken();{
@@ -327,8 +328,8 @@ public class TV extends ContentBase implements TMDBcompatible {
                             parser.nextToken();
                         //  if (token == JsonToken.VALUE_NUMBER_INT) {
                         switch (parser.getIntValue()) {
-                            case 1:tempPerson.setGender("female");
-                            case 2:tempPerson.setGender("male");
+                            case 1:tempPerson.getPerson().setGender("female");
+                            case 2:tempPerson.getPerson().setGender("male");
                         }
                         //       System.out.println("Gender:"+parser.getIntValue());
                         token = parser.nextToken();
@@ -339,7 +340,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                     token = parser.nextToken();
                     // if (token == JsonToken.VALUE_STRING) {
                     //        System.out.println("department: "+parser.getText());
-                    tempPerson.setKnownFor(parser.getText());
+                    tempPerson.getPerson().setKnownFor(parser.getText());
 
                     // }
                     while(!"name".equals(parser.getCurrentName())) token = parser.nextToken();
@@ -347,11 +348,35 @@ public class TV extends ContentBase implements TMDBcompatible {
                     token = parser.nextToken();
                     if (token == JsonToken.VALUE_STRING) {
                         //       System.out.println("Name: "+parser.getText());
-                        tempPerson.setName(parser.getText());
+                        tempPerson.getPerson().setName(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while (!"profile_path".equals(parser.getCurrentName())) token = parser.nextToken();
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_STRING) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.getPerson().setImageURL(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while(!"character".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_STRING) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.setCharacter(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while(!"order".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_NUMBER_INT) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.setOrder(parser.getIntValue());
                         token = parser.nextToken();
                     }
                     //System.out.println(parser.getCurrentName());
                     System.out.println();
+                    tempPerson.setContent(this);
                     this.getCast().add(tempPerson);
                 }
                 System.out.println();

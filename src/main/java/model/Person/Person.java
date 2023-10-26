@@ -9,16 +9,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.text.StringEscapeUtils;
 
-import java.io.IOException;
-import java.sql.Array;
+import java.io.*;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Person {
     //variables
     //known for should store the primary role of the person: director, actor, etc.
-    private String name, biography, gender, knownFor, imageLocation; // imagelocation will either be a file path or URL
+    private String name, biography, gender, knownFor, imageURL; // imagelocation will either be a file path or URL
     //tmdb is the TV Movie Database
     //ID should refer to a local database ID
     private int tmdbID, ID;
@@ -31,7 +30,7 @@ public class Person {
         biography= "";
         gender = "";
         knownFor = "";
-        imageLocation = "";
+        imageURL = "";
         credits = new ArrayList<ContentBase>();
 
     }
@@ -264,17 +263,17 @@ public class Person {
      *
      * @return java.lang.String, value of imageLocation
      */
-    public String getImageLocation() {
-        return imageLocation;
+    public String getImageURL() {
+        return imageURL;
     }
 
     /**
      * Method to set imageLocation.
      *
-     * @param imageLocation java.lang.String - imageLocation
+     * @param imageURL java.lang.String - imageLocation
      */
-    public void setImageLocation(String imageLocation) {
-        this.imageLocation = imageLocation;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
 //Methods
@@ -421,6 +420,13 @@ public class Person {
                 this.setName(parser.getText());
                 token = parser.nextToken();
             }
+            while (!"profile_path".equals(parser.getCurrentName())) token = parser.nextToken();
+            token = parser.nextToken();
+            if (token == JsonToken.VALUE_STRING) {
+                //       System.out.println("Name: "+parser.getText());
+                this.setImageURL(parser.getText());
+                token = parser.nextToken();
+            }
             //System.out.println(parser.getCurrentName());
             System.out.println();
 
@@ -432,12 +438,203 @@ public class Person {
 
                 }
 
+    }
+
+    public static void createTable(){
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            Statement statement = connection.createStatement();
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            statement.executeUpdate("drop table if exists person");
+
+            String[] strColumns = {"name","biography","image_url", "birthday", "knownFor", "gender"};
+            String[] intColumns = {"tmdb_id"};
+            String query = "create table if not exists person (id integer primary key asc";
+            for (String str : strColumns){
+                query += ", "+str + " text";
+            }
+            for (String str : intColumns){
+                query += ", "+str + " int ";
+            }
+            query += ")";
+
+
+            statement.executeUpdate(query);
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+    }
+    public void createRow(){
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            PreparedStatement statement = connection.prepareStatement("insert into person(name,biography,image_url, birthday, knownFor, gender, tmdb_id)" +
+                    " values(?,?,?,?,?,?,?)");
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            statement.setString(1,getName());
+            statement.setString(2,getBiography());
+            statement.setString(3,getImageURL());
+            if(getBirthday() != null) {
+                statement.setString(4, getBirthday().toString());
+            }
+            else statement.setString(4, "");
+            statement.setString(5,getKnownFor());
+            statement.setString(6,getGender());
+            statement.setInt(7,tmdbID);
 
 
 
+
+
+            statement.executeUpdate();
+            ResultSet rs = connection.createStatement().executeQuery("select * from person order by id desc limit 1");
+            while(rs.next())
+            {
+                // read the result set
+                System.out.println("name= " + rs.getString("name"));
+                System.out.println("id = " + rs.getInt("id"));
+                setID(rs.getInt("id"));
+                System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
+            }
+            makeImageLocal();
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
 
     }
 
+    public void readRow(int id){
+        Connection connection = null;
+        try
+        {
+
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
+            //        " values(?,?,?,?,?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("select * from person where id=?");
+            statement.setInt(1,id);
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            // statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            while(rs.next())
+            {
+                // read the result set
+                setID(rs.getInt("id"));
+                setName(rs.getString("name"));
+                setImageURL(rs.getString("image_url"));
+
+
+            }
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+    }
+    public void makeImageLocal(){
+        //URL url = new URL("https://image.tmdb.org/t/p/w500/d5iIlFn5s0ImszYzBPb8JPIfbXD.jpg");
+        OkHttpClient client = new OkHttpClient();
+
+
+        Request request = new Request.Builder()
+                .url("https://image.tmdb.org/t/p/w500"+ getImageURL())
+                .get()
+                .build();
+
+        try{
+            Response response = client.newCall(request).execute();
+            String path = "images/person/"+getID()+"/";
+
+            File img = new File(path);
+            img.mkdirs();
+            path += "profile.jpg";
+
+            img.createNewFile();
+            OutputStream out = new FileOutputStream(path);
+            out.write(response.body().bytes());
+        }
+        catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    /**
+     * Method returns a file input stream for use to display the local image
+     * @return
+     */
+    public FileInputStream getImage(){
+        System.out.println("Getting image, ID: " + getID());
+        try {
+            return new FileInputStream("images/person/"+getID()+"/profile.jpg");
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            throw new RuntimeException(e);
+            //try again after making a local image
+
+        }
+    }
     @Override
     public String toString(){
         String str = "";

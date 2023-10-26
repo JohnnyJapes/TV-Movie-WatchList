@@ -1,3 +1,7 @@
+package main;
+
+import model.Person.Person;
+import model.connectors.CastMember;
 import model.content.Movie;
 
 import java.io.File;
@@ -10,6 +14,8 @@ public class RefreshDatabase {
     public RefreshDatabase(){
         deleteDirectory(new File("images"));
         Movie temp = new Movie();
+        Person.createTable();
+        CastMember.createTable();
         temp.createTable();
         temp.getTMDBdetails(680);
         temp.createRow();
