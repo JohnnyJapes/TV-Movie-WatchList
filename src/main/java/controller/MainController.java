@@ -81,7 +81,7 @@ public class MainController {
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("TV-Movie Watchlists");
+            stage.setTitle("New Item");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
@@ -95,11 +95,11 @@ public class MainController {
     @FXML
     public void editButtonClicked() throws IOException{
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/edit-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("TV-Movie Watchlists");
+            stage.setTitle("Edit Item");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
