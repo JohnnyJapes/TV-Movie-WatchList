@@ -43,8 +43,8 @@ public class MainController {
         characterLabel.setText(selected.getCast().get(0).getCharacter());
         actorLabel.setText(selected.getCast().get(0).getPerson().getName());
         OkHttpClient client = new OkHttpClient();
+        System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
         Image image = new Image(selected.getCast().get(0).getPerson().getImage());
-        castImage1 = new ImageView();
         castImage1.setImage(image);
 
 

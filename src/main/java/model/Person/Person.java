@@ -625,7 +625,7 @@ public class Person {
      * @return
      */
     public FileInputStream getImage(){
-        System.out.println("Getting image, ID: " + getID());
+        System.out.println("Getting Person image, ID: " + getID());
         try {
             return new FileInputStream("images/person/"+getID()+"/profile.jpg");
         } catch (FileNotFoundException e) {
