@@ -31,4 +31,24 @@ public class SearchResultsController {
             searchList.getItems().addAll(contentList);
 
     }
+
+    /**
+     * Returns the currently selected item.
+     * @return
+     */
+    public ContentBase getSelected(){
+        return searchList.getSelectionModel().getSelectedItem();
+    }
+
+    /**
+     * Gets addButton.
+     *
+     * @return javafx.scene.control.Button, value of addButton
+     */
+    public Button getAddButton() {
+        return addButton;
+    }
+    public void closeWindow(){
+        
+    }
 }

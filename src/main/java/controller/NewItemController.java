@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import main.HelloApplication;
 import model.content.ContentBase;
 import model.content.Movie;
+import model.content.TV;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -66,6 +67,19 @@ public class NewItemController {
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
+            controller.getAddButton().setOnAction(event -> {
+                ContentBase selected = controller.getSelected();
+                if (selected.getContentType()  == 1) {
+                    Movie movie = (Movie) selected;
+                    movie.addFromSearch();
+                    stage.close();
+                }
+                else if (selected.getContentType() == 2) {
+                    TV tv = (TV) selected;
+                    tv.createRow();
+                }
+
+            });
         }
         catch (Exception e){
             e.printStackTrace();

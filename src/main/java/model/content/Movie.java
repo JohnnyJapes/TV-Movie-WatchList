@@ -406,6 +406,15 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         }
     }
+
+    public void addFromSearch(){
+        getTMDBdetails(getTmdbID());
+        createRow();
+    }
+
+    /**
+     * Add new entry to content table
+     */
     @Override
     public void createRow(){
         {

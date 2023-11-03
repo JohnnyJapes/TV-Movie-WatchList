@@ -20,6 +20,8 @@ public class ContentBase {
     private float userRating;
     private ArrayList<CastMember> cast;
 
+    public int contentType;
+
     public ContentBase() {
         cast = new ArrayList<CastMember>();
     }
@@ -56,6 +58,15 @@ public class ContentBase {
      */
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    /**
+     * Gets contentType.
+     *
+     * @return int, value of contentType
+     */
+    public int getContentType() {
+        return contentType;
     }
 
     /**
@@ -364,6 +375,9 @@ public class ContentBase {
 
     @Override
     public String toString() {
-        return title + " (" + releaseDate.getYear()+") \n " + overview.substring(0, 40) + "...";
+        String str= title;
+        if (releaseDate != null)str += " (" + releaseDate.getYear()+") \n ";
+        if (overview != null && overview.length() > 40) str += overview.substring(0, 40) + "...";
+        return str;
     }
 }
