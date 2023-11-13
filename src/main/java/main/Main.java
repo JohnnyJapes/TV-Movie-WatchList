@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import model.ContentList;
 import model.ListEntry;
+import model.Tables;
 import model.content.Movie;
 
 import java.io.IOException;
@@ -20,16 +21,24 @@ public class Main extends Application {
         stage.setResizable(false);
         stage.setScene(scene);
         MainController controller = fxmlLoader.getController();
-        ContentList temp = new ContentList();
-        new RefreshDatabase();
-        Movie pulp = new Movie();
-        pulp.readRow(1);
-        Movie test2 = new Movie();
-        test2.readRow(2);
-        //pulp.createRow();
-        temp.getListEntries().add(new ListEntry(pulp, 1));
-        temp.getListEntries().add(new ListEntry(test2, 2));
-        controller.setCurrentList(temp);
+        ContentList current = new ContentList();
+
+        //ContentList temp = new ContentList();
+        //new RefreshDatabase();
+        //Tables.refreshDatabase();
+
+        //default list when opening is watching
+        current.readWatchingList();
+
+
+//        Movie pulp = new Movie();
+//        pulp.readRow(1);
+//        Movie test2 = new Movie();
+//        test2.readRow(2);
+//        //pulp.createRow();
+//        temp.getListEntries().add(new ListEntry(pulp, 1));
+//        temp.getListEntries().add(new ListEntry(test2, 2));
+        controller.setCurrentList(current);
         //controller.setPoster(pulp.getImage() );
         //controller.setTitle(pulp.getTitle());
 
