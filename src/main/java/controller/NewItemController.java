@@ -32,7 +32,6 @@ public class NewItemController {
     @FXML
     RadioButton movieRadio, tvRadio;
 
-    final ToggleGroup group = new ToggleGroup();
 
     int currentList;
 
@@ -63,7 +62,13 @@ public class NewItemController {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/search-results.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             SearchResultsController controller = fxmlLoader.getController();
-            controller.addList((ArrayList<ContentBase>)new Movie().searchTMDB(title.getText()));
+            ToggleGroup contentGroup = movieRadio.getToggleGroup();
+            RadioButton selectedRadio = (RadioButton) contentGroup.getSelectedToggle();
+            if(selectedRadio.getText() == "Movie")
+                controller.addList((ArrayList<ContentBase>)new Movie().searchTMDB(title.getText()));
+            else{
+                controller.addList((ArrayList<ContentBase>)new TV().searchTMDB(title.getText()));
+            }
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Search Results");
@@ -78,11 +83,12 @@ public class NewItemController {
                     movie.addFromSearch();
                     ListEntry entry = new ListEntry(movie, currentList);
                     entry.createRow();
-
-
                 }
                 else if (selected.getContentType() == 2) {
                     TV tv = (TV) selected;
+                    stage.close();
+                    tv.addFromSearch();
+                    ListEntry entry = new ListEntry(tv, currentList);
                     tv.createRow();
                 }
 
