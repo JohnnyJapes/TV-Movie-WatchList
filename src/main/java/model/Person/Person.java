@@ -150,6 +150,17 @@ public class Person {
         this.gender = gender;
     }
 
+    public void setGender(int gender){
+        switch (gender) {
+            case 1:
+                this.setGender("female");
+                break;
+            case 2:
+                this.setGender("male");
+                break;
+        }
+    }
+
     /**
      * Gets knownFor.
      *
@@ -397,12 +408,9 @@ public class Person {
             if (token == JsonToken.FIELD_NAME && "gender".equals(parser.getCurrentName()))
                 parser.nextToken();
             //  if (token == JsonToken.VALUE_NUMBER_INT) {
-            switch (parser.getIntValue()) {
-                case 1:
-                    this.setGender("female");
-                case 2:
-                    this.setGender("male");
-            }
+            int gend = parser.getIntValue();
+            this.setGender(gend);
+
             token = parser.nextToken();
 
             //}
@@ -507,10 +515,6 @@ public class Person {
             statement.setString(6,getGender());
             statement.setInt(7,tmdbID);
 
-
-
-
-
             statement.executeUpdate();
             ResultSet rs = connection.createStatement().executeQuery("select * from person order by id desc limit 1");
             while(rs.next())
@@ -550,7 +554,6 @@ public class Person {
         Connection connection = null;
         try
         {
-
             // create a database connection
             connection = DriverManager.getConnection("jdbc:sqlite:local.db");
             //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
@@ -567,8 +570,6 @@ public class Person {
                 setID(rs.getInt("id"));
                 setName(rs.getString("name"));
                 setImageURL(rs.getString("image_url"));
-
-
             }
         }
         catch(SQLException e)

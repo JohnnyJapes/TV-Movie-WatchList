@@ -531,4 +531,5 @@ public class ContentBase {
     public void setWatched(int watched) {
         this.watched = watched;
     }
+
 }
