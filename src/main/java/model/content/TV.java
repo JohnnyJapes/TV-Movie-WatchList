@@ -18,8 +18,6 @@ import java.util.ArrayList;
 public class TV extends ContentBase implements TMDBcompatible {
 
     private final int contentType = 2; //1 for movies, 2 for tv shows
-    //total episodes is the total number of episodes in a tv show.
-    private int totalEpisodes, watchedEpisodes;
     //series creator
     private ArrayList<Person> creators;
 
@@ -117,6 +115,20 @@ public class TV extends ContentBase implements TMDBcompatible {
     public void setCreators(ArrayList<Person> creators) {
         this.creators = creators;
     }
+
+    /**
+     * Checks if record is a duplicate, if no, adds to list/database
+     */
+    public void addFromSearch(){
+        int found = searchLocalDB(getTmdbID());
+        if (found < 0) {
+            getTMDBdetails(getTmdbID());
+            createRow();
+        }
+        else setID(found);
+        return;
+    }
+
 
     public void getTMDBdetails(int tmdbID){
 
