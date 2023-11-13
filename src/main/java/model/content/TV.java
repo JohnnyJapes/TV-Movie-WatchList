@@ -26,7 +26,7 @@ public class TV extends ContentBase implements TMDBcompatible {
 
     public TV(){
         super();
-        creators = new ArrayList<Person>();
+        creators = topCrew;
         totalEpisodes = 0;
         watchedEpisodes = 0;
     }

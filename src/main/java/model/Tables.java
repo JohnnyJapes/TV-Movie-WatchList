@@ -1,5 +1,10 @@
 package model;
 
+import model.Person.Person;
+import model.connectors.CastMember;
+import model.content.Movie;
+
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -110,7 +115,7 @@ public class Tables {
     /**
      * Create table for content(movies/TV)
      */
-    public void createContentTable(){
+    public static void createContentTable(){
         Connection connection = null;
         try
         {
@@ -178,8 +183,8 @@ public class Tables {
 
             String[] intColumns = {"list_id, content_id, rank"};
             String query = "create table if not exists listentries (id integer primary key asc";
-            for (String str : intColumns){
-                query += ", "+str + " int ";
+            for (String str : intColumns) {
+                query += ", " + str + " int ";
             }
             query += ")";
 
@@ -206,6 +211,36 @@ public class Tables {
                 System.err.println(e.getMessage());
             }
         }
+    }
+
+    /**
+     * Method will empty image storage and recreate database; Destroying any data inside it. Will also add filler data
+     */
+    public static void refreshDatabase(){
+        deleteDirectory(new File("images"));
+        Movie temp = new Movie();
+        createContentTable();
+        createCastMemberTable();
+        createListEntryTable();
+        createPersonTable();
+        temp.getTMDBdetails(680);
+        temp.createRow();
+        ListEntry entry = new ListEntry(temp, 1, 0);
+        Movie temp2 = new Movie(988);
+        entry.createRow();
+        temp2.createRow();
+        ListEntry entry2 = new ListEntry(temp2, 2, 0);
+        entry2.createRow();
+    }
+
+    private static boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
     }
 
 }
