@@ -19,11 +19,16 @@ public class ContentBase {
     private LocalDate releaseDate;
     private float userRating;
     private ArrayList<CastMember> cast;
+    protected int watched;
+
+    protected ArrayList<Person> topCrew;          //For movies this is the director, for tv this is the creator(s)
 
     public int contentType;
 
     public ContentBase() {
         cast = new ArrayList<CastMember>();
+        topCrew = new ArrayList<Person>();
+        ID = -1;
     }
 
     public ContentBase(int ID){
@@ -206,6 +211,34 @@ public class ContentBase {
         this.imageURL = imageURL;
     }
 
+    /**
+     * Gets topCrew.
+     *
+     * @return java.util.ArrayList<model.Person.Person>, value of topCrew
+     */
+    public ArrayList<Person> getTopCrew() {
+        return topCrew;
+    }
+
+    /**
+     * Method to set contentType.
+     *
+     * @param contentType int - contentType
+     */
+    public void setContentType(int contentType) {
+        this.contentType = contentType;
+    }
+
+    /**
+     * Method to set topCrew.
+     *
+     * @param topCrew java.util.ArrayList<model.Person.Person> - topCrew
+     */
+    public void setTopCrew(ArrayList<Person> topCrew) {
+        this.topCrew = topCrew;
+    }
+
+    //CRUD
 
     public void createTable(){
         Connection connection = null;
@@ -379,5 +412,114 @@ public class ContentBase {
         if (releaseDate != null)str += " (" + releaseDate.getYear()+") \n ";
         if (overview != null && overview.length() > 40) str += overview.substring(0, 40) + "...";
         return str;
+    }
+    /**
+     * Reads from local database and applies to local object
+     * @param id
+     */
+    public void readRow(int id){
+        Connection connection = null;
+        try
+        {
+
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
+            //        " values(?,?,?,?,?,?,?)");
+            PreparedStatement statement = connection.prepareStatement("select * from content where id=?");
+            statement.setInt(1,id);
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            while(rs.next())
+            {
+                // read the result set
+                System.out.println("title = " + rs.getString("title"));
+                setTitle(rs.getString("title"));
+                System.out.println("id = " + rs.getInt("id"));
+                setID(rs.getInt("id"));
+                System.out.println("overview = " + rs.getString("overview"));
+                setOverview(rs.getString("overview"));
+                System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
+                setTmdbID((int) rs.getFloat("tmdb_id"));
+                setImageURL(rs.getString("image_url"));
+                setReleaseDate(rs.getString("releaseDate"));
+                Person temp = new Person();
+                temp.readRow(rs.getInt("director_id"));
+                setDirector(temp);
+                watched = rs.getInt("watched_episodes");
+                contentType = rs.getInt("content_type");
+
+            }
+            //makeImageLocal();
+            statement = connection.prepareStatement("select * from castmembers where content_id=?");
+            statement.setInt(1,this.getID());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            rs = statement.executeQuery();
+            while(rs.next())
+            {
+                CastMember member = new CastMember();
+                member.readRow(rs.getInt("id"));
+                member.setContent(this);
+                getCast().add(member);
+
+            }
+            statement = connection.prepareStatement("select * from castmembers where content_id=?");
+            statement.setInt(1,this.getID());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            rs = statement.executeQuery();
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+    }
+    public void setDirector(Person person){
+        topCrew.set(0, person);
+        return;
+    }
+
+    /**
+     * Gets watched.
+     *
+     * @return int, value of watched
+     */
+    public int getWatched() {
+        return watched;
+    }
+
+    /**
+     * Method to set watched.
+     *
+     * @param watched int - watched
+     */
+    public void setWatched(int watched) {
+        this.watched = watched;
     }
 }
