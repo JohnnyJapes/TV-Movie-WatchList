@@ -23,7 +23,7 @@ public class ContentBase {
 
     protected ArrayList<Person> topCrew;          //For movies this is the director, for tv this is the creator(s)
 
-    public int contentType;
+    public int contentType;         //1 for movies, 2 for TV
 
     public ContentBase() {
         cast = new ArrayList<CastMember>();
@@ -33,7 +33,9 @@ public class ContentBase {
 
     public ContentBase(int ID){
         //call function to fetch info from database
-
+        cast = new ArrayList<CastMember>();
+        topCrew = new ArrayList<Person>();
+        this.tmdbID = ID;
     }
 
     public ContentBase(String title, String overview, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast) {
@@ -500,9 +502,16 @@ public class ContentBase {
         }
 
     }
-    public void setDirector(Person person){
-        topCrew.set(0, person);
-        return;
+    /**
+     * Method to set director.
+     *
+     * @param director model.Person.Person - director
+     */
+    public void setDirector(Person director) {
+        if (topCrew.size() == 0) {
+            topCrew.add(director);
+        }
+        else  topCrew.set(0, director);
     }
 
     /**

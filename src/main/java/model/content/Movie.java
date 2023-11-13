@@ -21,7 +21,6 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     private final int contentType = 1; //1 for movies, 2 for TV shows
     private Person director;
-    protected int watched;
 
     public Movie(){
         super();
@@ -30,17 +29,25 @@ public class Movie extends ContentBase implements TMDBcompatible {
     }
 
     public Movie(Person director) {
+        //topCrew.set(0, director);
         this.director = director;
     }
 
+    /**
+     * Uses tmdb ID
+     * @param ID
+     * @param director
+     */
     public Movie(int ID, Person director) {
         super(ID);
+        topCrew.set(0, director);
         this.director = director;
     }
 
     public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast, Person director) {
         super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.director = director;
+        topCrew.set(0, director);
     }
     public Movie(int tmdbID){
         super();
@@ -72,6 +79,10 @@ public class Movie extends ContentBase implements TMDBcompatible {
      * @param director model.Person.Person - director
      */
     public void setDirector(Person director) {
+        if (topCrew.size() == 0) {
+            topCrew.add(director);
+        }
+        else  topCrew.set(0, director);
         this.director = director;
     }
 
