@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import main.HelloApplication;
 import model.ContentList;
 import model.ListEntry;
+import model.content.ContentBase;
 import model.content.Movie;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,10 +35,22 @@ public class MainController {
     ImageView castImage1;
     @FXML
     public void getSelectedItem(){
-        Movie selected =  (Movie) currentList.getSelectionModel().getSelectedItem().getEntry();
+        ContentBase selected =  currentList.getSelectionModel().getSelectedItem().getEntry();
+        if (selected.getContentType() == 1)
+            directorLabel.setText(selected.getTopCrew().get(0).getName());
+        else{
+            String creators = "";
+            for (int i = 0; i < selected.getTopCrew().size(); i++){
+                if ( selected.getTopCrew().size() - i == 1){
+                    creators += selected.getTopCrew().get(i);
+                }
+                else  creators += selected.getTopCrew().get(i) + ", ";
+            }
+            directorLabel.setText(creators);
+        }
         titleLabel.setText(selected.getTitle());
         setPoster(selected.getImage());
-        directorLabel.setText(selected.getDirector().getName());
+
         yearLabel.setText(Integer.toString(selected.getReleaseDate().getYear()));
         overviewLabel.setText(selected.getOverview());
         characterLabel.setText(selected.getCast().get(0).getCharacter());
@@ -59,6 +72,7 @@ public class MainController {
             currentList.getItems().add(ent);
         }
 
+
     }
     public void setPoster(FileInputStream input){
         Image image = new Image(input);
@@ -79,12 +93,18 @@ public class MainController {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            NewItemController controller = fxmlLoader.getController();
+            controller.setCurrentList(0);       //TODO: make application read from GUI which list is currently selected
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("New Item");
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
+            stage.setOnCloseRequest((event) -> {
+                readContentTable();
+
+            });
         }
         catch (Exception e){
             e.printStackTrace();
@@ -112,6 +132,13 @@ public class MainController {
     @FXML
     public void deleteButtonClicked() throws IOException{
 
+    }
+
+    public void readContentTable(){
+        ContentList list = new ContentList();
+        list.readWatchingList();
+        setCurrentList(list);
+        return;
     }
 
 }

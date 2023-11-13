@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.HelloApplication;
+import model.ListEntry;
 import model.content.ContentBase;
 import model.content.Movie;
 import model.content.TV;
@@ -32,6 +33,8 @@ public class NewItemController {
     RadioButton movieRadio, tvRadio;
 
     final ToggleGroup group = new ToggleGroup();
+
+    int currentList;
 
 /*    public NewItemController(){
         movieRadio.setToggleGroup(group);
@@ -71,8 +74,12 @@ public class NewItemController {
                 ContentBase selected = controller.getSelected();
                 if (selected.getContentType()  == 1) {
                     Movie movie = (Movie) selected;
-                    movie.addFromSearch();
                     stage.close();
+                    movie.addFromSearch();
+                    ListEntry entry = new ListEntry(movie, currentList);
+                    entry.createRow();
+
+
                 }
                 else if (selected.getContentType() == 2) {
                     TV tv = (TV) selected;
@@ -85,5 +92,23 @@ public class NewItemController {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * Gets currentList.
+     *
+     * @return int, value of currentList
+     */
+    public int getCurrentList() {
+        return currentList;
+    }
+
+    /**
+     * Method to set currentList.
+     *
+     * @param currentList int - currentList
+     */
+    public void setCurrentList(int currentList) {
+        this.currentList = currentList;
     }
 }
