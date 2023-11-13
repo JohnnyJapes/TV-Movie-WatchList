@@ -19,7 +19,7 @@ public class ContentBase {
     private LocalDate releaseDate;
     private float userRating;
     private ArrayList<CastMember> cast;
-    protected int watched;
+    protected int totalEpisodes, watchedEpisodes;
 
     protected ArrayList<Person> topCrew;          //For movies this is the director, for tv this is the creator(s)
 
@@ -240,6 +240,42 @@ public class ContentBase {
         this.topCrew = topCrew;
     }
 
+    /**
+     * Gets totalEpisodes.
+     *
+     * @return int, value of totalEpisodes
+     */
+    public int getTotalEpisodes() {
+        return totalEpisodes;
+    }
+
+    /**
+     * Method to set totalEpisodes.
+     *
+     * @param totalEpisodes int - totalEpisodes
+     */
+    public void setTotalEpisodes(int totalEpisodes) {
+        this.totalEpisodes = totalEpisodes;
+    }
+
+    /**
+     * Gets watchedEpisodes.
+     *
+     * @return int, value of watchedEpisodes
+     */
+    public int getWatchedEpisodes() {
+        return watchedEpisodes;
+    }
+
+    /**
+     * Method to set watchedEpisodes.
+     *
+     * @param watchedEpisodes int - watchedEpisodes
+     */
+    public void setWatchedEpisodes(int watchedEpisodes) {
+        this.watchedEpisodes = watchedEpisodes;
+    }
+
     //CRUD
 
     public void createTable(){
@@ -292,6 +328,72 @@ public class ContentBase {
             }
         }
     }
+
+    public void createRow(){
+        {
+            Connection connection = null;
+            getTopCrew().get(0).createRow();
+            if(contentType == 1) setTotalEpisodes(1);
+            try
+            {
+                // create a database connection
+                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url, releaseDate, director_id)" +
+                        " values(?,?,?,?,?,?,?,?,?)");
+                statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+                statement.setString(1,getTitle());
+                statement.setString(2,getOverview());
+                statement.setInt(3,getTmdbID());
+                statement.setInt(4,getContentType());
+                statement.setInt(5,getTotalEpisodes());
+                statement.setInt(6,0);
+                statement.setString(7,getImageURL());
+                statement.setString(8, getReleaseDate().toString());
+                statement.setInt(9, getTopCrew().get(0).getID());
+
+
+
+                statement.executeUpdate();
+                ResultSet rs = connection.createStatement().executeQuery("select * from content order by id desc limit 1");
+                while(rs.next())
+                {
+                    // read the result set
+                    System.out.println("title = " + rs.getString("title"));
+                    System.out.println("id = " + rs.getInt("id"));
+                    setID(rs.getInt("id"));
+                    System.out.println("overview = " + rs.getString("overview"));
+                    System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
+                }
+                for (int i = 0; i < 5; i++){
+                    getCast().get(i).createRow();
+                }
+
+                makeImageLocal();
+            }
+            catch(SQLException e)
+            {
+                // if the error message is "out of memory",
+                // it probably means no database file is found
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    if(connection != null)
+                        connection.close();
+                }
+                catch(SQLException e)
+                {
+                    // connection close failed.
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
+    }
+/*
     public void createRow(){
         {
             Connection connection = null;
@@ -341,6 +443,7 @@ public class ContentBase {
             }
         }
     }
+*/
     public String getDetails(){
         String str = String.format("Title: %s\nOverview: %s\nRelease Date: %s", title, overview, releaseDate);
 
@@ -451,7 +554,7 @@ public class ContentBase {
                 Person temp = new Person();
                 temp.readRow(rs.getInt("director_id"));
                 setDirector(temp);
-                watched = rs.getInt("watched_episodes");
+                watchedEpisodes = rs.getInt("watched_episodes");
                 contentType = rs.getInt("content_type");
 
             }
@@ -520,7 +623,7 @@ public class ContentBase {
      * @return int, value of watched
      */
     public int getWatched() {
-        return watched;
+        return watchedEpisodes;
     }
 
     /**
@@ -529,7 +632,56 @@ public class ContentBase {
      * @param watched int - watched
      */
     public void setWatched(int watched) {
-        this.watched = watched;
+        this.watchedEpisodes = watched;
     }
+    public int searchLocalDB(int tmdbID){
+        int localID = -1;
+        Connection connection = null;
+        try
+        {
 
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+
+            PreparedStatement statement = connection.prepareStatement("select * from content where tmdb_id=? AND content_type=?");
+            statement.setInt(1,tmdbID);
+            statement.setInt(2, getContentType());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            int i = 0;
+            while(rs.next())
+            {
+                // read the result set
+                localID = rs.getInt("id");
+                i++;
+            }
+
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return localID;
+    }
 }
