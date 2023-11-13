@@ -24,8 +24,9 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     public Movie(){
         super();
+
         director = new Person();
-        watched = 0;
+        watchedEpisodes = 0;
     }
 
     public Movie(Person director) {
@@ -416,6 +417,9 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
     }
 
+    /**
+     * Checks if record is a duplicate, if no, adds to list/database
+     */
     public void addFromSearch(){
         int found = searchLocalDB(getTmdbID());
         if (found < 0) {
@@ -424,7 +428,6 @@ public class Movie extends ContentBase implements TMDBcompatible {
         }
         else setID(found);
         return;
-
     }
 
     /**
@@ -531,7 +534,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 Person temp = new Person();
                 temp.readRow(rs.getInt("director_id"));
                 setDirector(temp);
-                watched = rs.getInt("watched_episodes");
+                watchedEpisodes = rs.getInt("watched_episodes");
 
             }
             //makeImageLocal();
@@ -582,55 +585,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
     }
 
-    public int searchLocalDB(int tmdbID){
-        int localID = -1;
-        Connection connection = null;
-        try
-        {
 
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
-
-            PreparedStatement statement = connection.prepareStatement("select * from content where tmdb_id=? AND content_type=1");
-            statement.setInt(1,tmdbID);
-            statement.setQueryTimeout(30);  // set timeout to 30 sec.
-
-
-            // statement.executeQuery();
-            ResultSet rs = statement.executeQuery();
-            int i = 0;
-            while(rs.next())
-            {
-                // read the result set
-                localID = rs.getInt("id");
-                i++;
-            }
-
-
-        }
-        catch(SQLException e)
-        {
-            // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-        }
-        finally
-        {
-            try
-            {
-                if(connection != null)
-                    connection.close();
-            }
-            catch(SQLException e)
-            {
-                // connection close failed.
-                System.err.println(e.getMessage());
-            }
-        }
-
-        return localID;
-    }
 
     @Override
     public String getDetails(){
