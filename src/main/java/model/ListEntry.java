@@ -122,7 +122,7 @@ public class ListEntry {
 
             statement.setInt(2,getEntry().getID());
             if(getListRank() < 0){
-                ResultSet rsLast = connection.createStatement().executeQuery("select rank from listentries sort by rank desc limit 1");
+                ResultSet rsLast = connection.createStatement().executeQuery("select rank from listentries order by rank desc limit 1");
                 int lastRank = rsLast.getInt("rank");
                 statement.setInt(3, lastRank+1);
             }

@@ -59,15 +59,10 @@ public class MainController {
         System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
         Image image = new Image(selected.getCast().get(0).getPerson().getImage());
         castImage1.setImage(image);
-
-
-
-
-
-
     }
 
     public void setCurrentList(ContentList list){
+         currentList.getItems().clear();
         for (ListEntry ent : list.getListEntries()){
             currentList.getItems().add(ent);
         }
@@ -103,7 +98,6 @@ public class MainController {
             stage.show();
             stage.setOnCloseRequest((event) -> {
                 readContentTable();
-
             });
         }
         catch (Exception e){
