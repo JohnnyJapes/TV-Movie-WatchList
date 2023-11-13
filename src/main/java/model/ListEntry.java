@@ -10,6 +10,13 @@ public class ListEntry {
     private ContentBase entry; //actual piece of content for that entry
     private int listRank; //rank/order in the default list sorting
     public int listID;//0 watching, 1 completed, 2 plan to watch, 3 abandoned
+
+
+    public ListEntry(){
+        listID = -1;
+        listRank = -1;
+        entry = new ContentBase();
+    }
     public ListEntry(ContentBase entry, int listRank) {
         this.entry = entry;
         this.listRank = listRank;
@@ -51,6 +58,24 @@ public class ListEntry {
         this.listRank = listRank;
     }
 
+    /**
+     * Gets listID.
+     *
+     * @return int, value of listID
+     */
+    public int getListID() {
+        return listID;
+    }
+
+    /**
+     * Method to set listID.
+     *
+     * @param listID int - listID
+     */
+    public void setListID(int listID) {
+        this.listID = listID;
+    }
+
     @Override
     public String toString() {
         return listRank + ". " + entry.getTitle();
@@ -69,6 +94,10 @@ public class ListEntry {
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
             statement.setInt(1,listID);
+            if (getEntry().getID() < 0){
+                getEntry().createRow();
+            }
+
             statement.setInt(2,getEntry().getID());
             statement.setInt(3,getListRank());
 
@@ -112,6 +141,70 @@ public class ListEntry {
     }
 
     public void readRow(int id){
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            PreparedStatement statement = connection.prepareStatement("select * from listentries where content_id=?");
+            statement.setInt(1,getEntry().getID());
+
+            ResultSet rs = statement.executeQuery();
+            while(rs.next())
+            {
+                ContentBase temp = new ContentBase();
+                // read the result set
+                System.out.println("list_id = " + rs.getInt("list_id"));
+                setListID(rs.getInt("list_id"));
+                System.out.println("content_id = " + rs.getInt("content_id"));
+                temp.readRow(rs.getInt("content_id"));
+                System.out.println("Entry Title = " + temp.getTitle());
+                System.out.println("Rank = " + rs.getInt("rank"));
+                setListRank(rs.getInt("rank"));
+
+            }
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+
+
+    }
+
+
+    public void readData(ResultSet rs){
+        ContentBase temp = new ContentBase();
+
+        try {
+            // read the result set
+            System.out.println("list_id = " + rs.getInt("list_id"));
+            setListID(rs.getInt("list_id"));
+            System.out.println("content_id = " + rs.getInt("content_id"));
+            temp.readRow(rs.getInt("content_id"));
+            System.out.println("Entry Title = " + temp.getTitle());
+            System.out.println("Rank = " + rs.getInt("rank"));
+            setListRank(rs.getInt("rank"));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
