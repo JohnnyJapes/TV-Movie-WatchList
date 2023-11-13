@@ -112,7 +112,7 @@ public class ContentList {
                         content.getCast().add(member);
 
                     }
-                    ListEntry entry = new ListEntry(content, 3);
+                    ListEntry entry = new ListEntry(content, 3, 0);
 
                     listEntries.add(entry);
 
@@ -152,7 +152,7 @@ public class ContentList {
 
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:local.db");
-            PreparedStatement statement = connection.prepareStatement("select id from listentries where list_id=0");
+            PreparedStatement statement = connection.prepareStatement("select * from listentries where list_id=0");
 
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
