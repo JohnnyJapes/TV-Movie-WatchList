@@ -17,9 +17,31 @@ public class ListEntry {
         listRank = -1;
         entry = new ContentBase();
     }
-    public ListEntry(ContentBase entry, int listRank) {
+
+
+
+    /**
+     * Will create new object with these properites. Will NOT create an entry in the database. Use createRow()
+     * @param entry
+     * @param listID - 0 = watching, 1 completed, 2 plan to watch, 3 abandoned
+     */
+    public ListEntry(ContentBase entry,  int listID) {
+        this.entry = entry;
+        this.listID = listID;
+        listRank = -1;
+    }
+
+
+    /**
+     * Will create new object with these properites. Will NOT create an entry in the database. Use createRow()
+     * @param entry
+     * @param listRank
+     * @param listID - 0 = watching, 1 completed, 2 plan to watch, 3 abandoned
+     */
+    public ListEntry(ContentBase entry, int listRank, int listID) {
         this.entry = entry;
         this.listRank = listRank;
+        this.listID = listID;
     }
 
     /**
@@ -99,7 +121,12 @@ public class ListEntry {
             }
 
             statement.setInt(2,getEntry().getID());
-            statement.setInt(3,getListRank());
+            if(getListRank() < 0){
+                ResultSet rsLast = connection.createStatement().executeQuery("select rank from listentries sort by rank desc limit 1");
+                int lastRank = rsLast.getInt("rank");
+                statement.setInt(3, lastRank+1);
+            }
+            else statement.setInt(3,getListRank());
 
 
 
@@ -160,6 +187,7 @@ public class ListEntry {
                 temp.readRow(rs.getInt("content_id"));
                 System.out.println("Entry Title = " + temp.getTitle());
                 System.out.println("Rank = " + rs.getInt("rank"));
+                setEntry(temp);
                 setListRank(rs.getInt("rank"));
 
             }
@@ -201,6 +229,7 @@ public class ListEntry {
             temp.readRow(rs.getInt("content_id"));
             System.out.println("Entry Title = " + temp.getTitle());
             System.out.println("Rank = " + rs.getInt("rank"));
+            setEntry(temp);
             setListRank(rs.getInt("rank"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -208,11 +237,11 @@ public class ListEntry {
 
     }
 
-    public void updateRow(){
+    public void updateRow(ListEntry entry){
 
     }
 
-    public void deleteRow(){
+    public void deleteRow(ListEntry entry){
 
     }
 
