@@ -177,7 +177,7 @@ public class Tables {
             statement.executeUpdate("drop table if exists listentries");
 
             String[] intColumns = {"list_id, content_id, rank"};
-            String query = "create table if not exists castMembers (id integer primary key asc";
+            String query = "create table if not exists listentries (id integer primary key asc";
             for (String str : intColumns){
                 query += ", "+str + " int ";
             }
