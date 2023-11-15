@@ -10,6 +10,9 @@
 .navButton:hover{
 	-fx-background-color: black;
 }
+.navButton.current{
+	-fx-background-color: black;
+}
 
 .addContent{
 	-fx-background-color: #154C79;

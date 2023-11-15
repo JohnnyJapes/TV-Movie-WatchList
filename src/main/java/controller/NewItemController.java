@@ -10,6 +10,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.HelloApplication;
 import model.ListEntry;
+import model.Person.Person;
 import model.content.ContentBase;
 import model.content.Movie;
 import model.content.TV;
@@ -24,16 +25,20 @@ public class NewItemController {
     @FXML
     ImageView tmdbImage;
     @FXML
-    TextField title, director;
+    TextField title, director, tmdbID, episodes;
     @FXML
     DatePicker date;
     @FXML
     TextArea overview;
     @FXML
     RadioButton movieRadio, tvRadio;
+    @FXML
+    Button addItem;
 
 
     int currentList;
+
+    protected ContentBase content = new ContentBase();
 
 /*    public NewItemController(){
         movieRadio.setToggleGroup(group);
@@ -55,6 +60,15 @@ public class NewItemController {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @FXML
+    public void movieRadioSelected(){
+        episodes.setDisable(true);
+    }
+    @FXML
+    public void tvRadioSelected(){
+        episodes.setDisable(false);
     }
     @FXML
     public void clickTMDBsearch(){
@@ -79,16 +93,21 @@ public class NewItemController {
                     Movie movie = (Movie) selected;
                     stage.close();
                     movie.addFromSearch();
-                    ListEntry entry = new ListEntry(movie, currentList);
-                    entry.createRow();
+                    movie.setTotalEpisodes(1);
+                   // ListEntry entry = new ListEntry(movie, currentList);
+                   // entry.createRow();
                 }
                 else if (selected.getContentType() == 2) {
                     TV tv = (TV) selected;
                     stage.close();
                     tv.addFromSearch();
-                    ListEntry entry = new ListEntry(tv, currentList);
-                    tv.createRow();
+                  //  ListEntry entry = new ListEntry(tv, currentList);
+                  //  tv.createRow();
                 }
+                movieRadio.setDisable(true);
+                tvRadio.setDisable(true);
+                setTextFields(selected);
+                content = selected;
 
             });
         }
@@ -115,4 +134,61 @@ public class NewItemController {
     public void setCurrentList(int currentList) {
         this.currentList = currentList;
     }
+
+    /**
+     * Sets textfields and datepicker according to the given contentBase
+     * @param result
+     */
+    public void setTextFields(ContentBase result){
+        director.setText(result.getTopCrew().get(0).getName());
+        tmdbID.setText(Integer.toString(result.getTmdbID()));
+        episodes.setText(Integer.toString(result.getTotalEpisodes()));
+        overview.setText(result.getOverview());
+        title.setText(result.getTitle());
+        date.setValue(result.getReleaseDate());
+    }
+
+    /**
+     * Takes user input from input fields
+     */
+    public void takeUserInput(){
+        content.setWatched(0);
+        try {
+
+            content.setTitle(title.getText());
+            if (tmdbID.getText() == "") tmdbID.setText("-1");
+            content.setTmdbID(Integer.parseInt(tmdbID.getText()));
+            Person holdDirector = new Person();
+            holdDirector.setName(director.getText());
+            int found = holdDirector.searchNameLocalDB();
+            if (found > -1) holdDirector.readRow(found);
+            else {
+                ArrayList<Person> personList = Person.searchPersonTMDB(director.getText());
+                if (personList.size() > 0){
+                    holdDirector = personList.get(0);
+                }
+                holdDirector.createRow();
+            }
+            content.setDirector(holdDirector);
+            content.setOverview(overview.getText());
+            if(movieRadio.isSelected()){
+                content.setContentType(1);  //movie
+                content.setTotalEpisodes(1);
+            }
+
+            else if(tvRadio.isSelected()){
+                content.setTotalEpisodes(Integer.parseInt(episodes.getText()));
+                content.setContentType(2); //tv
+            }
+            content.setReleaseDate(date.getValue());
+            ListEntry entry = new ListEntry(content, currentList);
+            entry.createRow();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+
+        }
+    }
+
+
 }

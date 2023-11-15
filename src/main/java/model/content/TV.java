@@ -275,7 +275,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                         }
                     }
                     while (!"first_air_date".equals(parser.getCurrentName())) token = parser.nextToken();
-                    if (token == JsonToken.FIELD_NAME && "release_date".equals(parser.getCurrentName())) {
+                    if (token == JsonToken.FIELD_NAME && "first_air_date".equals(parser.getCurrentName())) {
                         token = parser.nextToken();
                         if (token == JsonToken.VALUE_STRING) {
                             System.out.println("release_date : " + parser.getText());
@@ -307,13 +307,13 @@ public class TV extends ContentBase implements TMDBcompatible {
     }
 
 
-    public void addCast(){
+   /* public void addCast(){
         OkHttpClient client = new OkHttpClient();
         String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
 
         try{
             Request request = new Request.Builder()
-                    .url("https://api.themoviedb.org/3/tv/" + query + "/credits?language=en-US")
+                        .url("https://api.themoviedb.org/3/tv/" + query + "/credits?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
                     .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
@@ -404,7 +404,7 @@ public class TV extends ContentBase implements TMDBcompatible {
         }
 
 
-    }
+    }*/
     public void addCreators(){
         OkHttpClient client = new OkHttpClient();
         String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
@@ -497,6 +497,11 @@ public class TV extends ContentBase implements TMDBcompatible {
         str += "\nTotal Episodes: " + totalEpisodes;
         return str;
 
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 
 }

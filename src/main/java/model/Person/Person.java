@@ -31,6 +31,8 @@ public class Person {
         gender = "";
         knownFor = "";
         imageURL = "";
+        tmdbID = -1;
+        birthday = LocalDate.parse("1969-10-10");
         credits = new ArrayList<ContentBase>();
 
     }
@@ -635,6 +637,60 @@ public class Person {
             //try again after making a local image
 
         }
+    }
+
+    /**
+     * Checks local DB for person based on Name in current object
+     * @return
+     */
+    public int searchNameLocalDB(){
+        int localID = -1;
+        Connection connection = null;
+        try
+        {
+
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+
+            PreparedStatement statement = connection.prepareStatement("select * from person where name=?");
+            statement.setString(1,getName());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+
+            // statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            int i = 0;
+            while(rs.next())
+            {
+                // read the result set
+                localID = rs.getInt("id");
+                i++;
+            }
+
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
+        return localID;
     }
     @Override
     public String toString(){

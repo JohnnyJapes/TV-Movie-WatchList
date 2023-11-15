@@ -1,10 +1,14 @@
 package model.content;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import model.Person.Person;
 import model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
 import java.sql.*;
@@ -366,6 +370,7 @@ public class ContentBase {
                     System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
                 }
                 for (int i = 0; i < 5; i++){
+                    if (getCast().size() < 1) break;
                     getCast().get(i).createRow();
                 }
 
@@ -605,6 +610,15 @@ public class ContentBase {
         }
 
     }
+
+    /**
+     * Will update row with given contentBase object
+     * @param update
+     */
+    public void updateRow(ContentBase update){
+
+
+    }
     /**
      * Method to set director.
      *
@@ -634,6 +648,12 @@ public class ContentBase {
     public void setWatched(int watched) {
         this.watchedEpisodes = watched;
     }
+
+    /**
+     * Checks local DB for content based on tmdbID
+     * @param tmdbID
+     * @return
+     */
     public int searchLocalDB(int tmdbID){
         int localID = -1;
         Connection connection = null;
@@ -684,4 +704,116 @@ public class ContentBase {
 
         return localID;
     }
+
+    public void addCast(){
+        OkHttpClient client = new OkHttpClient();
+        String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
+
+        try{
+            String startURL = "";
+            if (contentType == 1) startURL = "https://api.themoviedb.org/3/movie/";
+            else startURL = "https://api.themoviedb.org/3/tv/";
+            Request request = new Request.Builder()
+                    .url(startURL+ query + "/credits?language=en-US")
+                    .get()
+                    .addHeader("accept", "application/json")
+                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .build();
+            Response response = client.newCall(request).execute();
+            JsonFactory factory = new JsonFactory();
+            JsonParser parser = factory.createParser(response.body().string());
+            JsonToken token = parser.nextToken();
+
+            //Fetching cast and adding them to person arraylist
+            while(!"cast".equals(parser.getCurrentName())) token = parser.nextToken();
+            if (token == JsonToken.FIELD_NAME && "cast".equals(parser.getCurrentName())) {
+                //System.out.println("Cast - \n");
+                token = parser.nextToken();
+                token = parser.nextToken();
+                token = parser.nextToken();// // Read left bracket i.e. [
+                // Loop to print array elements until right bracket i.e ]
+                for (int i = 0; i < 7; i++){
+                    CastMember tempPerson = new CastMember();
+                    parser.nextToken();
+                    if (token == JsonToken.END_ARRAY) break;
+                    while(!"gender".equals(parser.getCurrentName())) token = parser.nextToken();{
+                        if (token == JsonToken.FIELD_NAME && "gender".equals(parser.getCurrentName()))
+                            parser.nextToken();
+                        //  if (token == JsonToken.VALUE_NUMBER_INT) {
+                        int gen = parser.getIntValue();
+                        tempPerson.getPerson().setGender(gen);
+                        //       System.out.println("Gender:"+parser.getIntValue());
+                        token = parser.nextToken();
+                    }
+                    while(!"id".equals(parser.getCurrentName()) ) token = parser.nextToken();
+                    if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
+                        token = parser.nextToken();
+                        if (token == JsonToken.VALUE_NUMBER_INT) {
+                            // System.out.println("ID : " + parser.getIntValue());
+                            tempPerson.getPerson().setTmdbID(parser.getIntValue());
+                        }
+                    }
+                    //}
+                    while(!"known_for_department".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    // if (token == JsonToken.VALUE_STRING) {
+                    //        System.out.println("department: "+parser.getText());
+                    tempPerson.getPerson().setKnownFor(parser.getText());
+
+                    // }
+
+                    while(!"name".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_STRING) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.getPerson().setName(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while (!"profile_path".equals(parser.getCurrentName())) token = parser.nextToken();
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_STRING) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.getPerson().setImageURL(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while(!"character".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_STRING) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.setCharacter(parser.getText());
+                        token = parser.nextToken();
+                    }
+                    while(!"order".equals(parser.getCurrentName())) token = parser.nextToken();
+
+                    token = parser.nextToken();
+                    if (token == JsonToken.VALUE_NUMBER_INT) {
+                        //       System.out.println("Name: "+parser.getText());
+                        tempPerson.setOrder(parser.getIntValue());
+                        token = parser.nextToken();
+                    }
+                    //System.out.println(parser.getCurrentName());
+                    System.out.println();
+                    tempPerson.setContent(this);
+                    this.getCast().add(tempPerson);
+                }
+                System.out.println();
+            }
+
+
+
+        }
+        catch(Error | IOException e){
+            System.out.println(e);
+            // e.printStackTrace();
+
+        }
+
+    }
+
+
+
+
 }

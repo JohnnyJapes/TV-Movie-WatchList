@@ -96,6 +96,11 @@ public class MainController {
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
+            controller.addItem.setOnAction(event -> {
+                controller.takeUserInput();
+                stage.close();
+                readContentTable();
+            });
             stage.setOnCloseRequest((event) -> {
                 readContentTable();
             });
