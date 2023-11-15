@@ -734,9 +734,9 @@ public class ContentBase {
                 // Loop to print array elements until right bracket i.e ]
                 for (int i = 0; i < 7; i++){
                     CastMember tempPerson = new CastMember();
-                    parser.nextToken();
                     if (token == JsonToken.END_ARRAY) break;
-                    while(!"gender".equals(parser.getCurrentName())) token = parser.nextToken();{
+                    while(!"gender".equals(parser.getCurrentName()) && token != JsonToken.END_ARRAY) token = parser.nextToken();{
+                        if (token == JsonToken.END_ARRAY) break;
                         if (token == JsonToken.FIELD_NAME && "gender".equals(parser.getCurrentName()))
                             parser.nextToken();
                         //  if (token == JsonToken.VALUE_NUMBER_INT) {
@@ -794,6 +794,7 @@ public class ContentBase {
                         tempPerson.setOrder(parser.getIntValue());
                         token = parser.nextToken();
                     }
+                    if (token == JsonToken.END_ARRAY) break;
                     //System.out.println(parser.getCurrentName());
                     System.out.println();
                     tempPerson.setContent(this);

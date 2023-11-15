@@ -260,7 +260,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         addDirector();
         System.out.println("Movie Title: " + this.getTitle() + "\n");
     }
-    public void addCast(){
+    /*public void addCast(){
         OkHttpClient client = new OkHttpClient();
         String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
 
@@ -363,7 +363,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
 
         }
 
-    }
+    }*/
     public void addDirector(){
         OkHttpClient client = new OkHttpClient();
         String query = StringEscapeUtils.escapeHtml4(Integer.toString(this.getTmdbID()));
