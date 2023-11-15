@@ -62,9 +62,7 @@ public class NewItemController {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/search-results.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             SearchResultsController controller = fxmlLoader.getController();
-            ToggleGroup contentGroup = movieRadio.getToggleGroup();
-            RadioButton selectedRadio = (RadioButton) contentGroup.getSelectedToggle();
-            if(selectedRadio.getText() == "Movie")
+            if(movieRadio.isSelected())
                 controller.addList((ArrayList<ContentBase>)new Movie().searchTMDB(title.getText()));
             else{
                 controller.addList((ArrayList<ContentBase>)new TV().searchTMDB(title.getText()));

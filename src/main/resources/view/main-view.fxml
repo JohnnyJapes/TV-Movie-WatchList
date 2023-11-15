@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="674.0" maxWidth="891.0" minHeight="674.0" minWidth="891.0" prefHeight="674.0" prefWidth="891.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<BorderPane maxHeight="674.0" maxWidth="1062.0" minHeight="674.0" minWidth="891.0" prefHeight="674.0" prefWidth="1062.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <top>
       <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css" BorderPane.alignment="CENTER">
         <buttons>
@@ -39,7 +39,7 @@
       </ButtonBar>
    </top>
    <left>
-      <SplitPane dividerPositions="0.1820250284414107" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="891.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.1820250284414107" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="1062.0" BorderPane.alignment="CENTER">
         <items>
             <VBox>
                <children>
@@ -59,7 +59,7 @@
                      </HBox.margin>
                   </ImageView>
                   <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <VBox prefHeight="632.0" prefWidth="514.0">
+                  <VBox prefHeight="622.0" prefWidth="558.0">
                      <children>
                         <HBox alignment="CENTER">
                            <children>
