@@ -616,8 +616,57 @@ public class ContentBase {
      * @param update
      */
     public void updateRow(ContentBase update){
+        {
+            Connection connection = null;
+            try
+            {
+                // create a database connection
+                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                String sql = "UPDATE content SET title=?, overview=?, total_episodes=?, watched_episodes=?, releaseDate=? WHERE id=?";
+                PreparedStatement statement = connection.prepareStatement(sql);
+                statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+                statement.setString(1,getTitle());
+                statement.setString(2,getOverview());
+                statement.setInt(3,getTotalEpisodes());
+                statement.setInt(4,getWatchedEpisodes());
+                statement.setString(5, getReleaseDate().toString());
+                statement.setInt(6, getID());
 
 
+
+                statement.executeUpdate();
+                ResultSet rs = connection.createStatement().executeQuery("select * from content order by id desc limit 1");
+                while(rs.next())
+                {
+                    // read the result set
+                    System.out.println("title = " + rs.getString("title"));
+                    System.out.println("id = " + rs.getInt("id"));
+                    System.out.println("overview = " + rs.getString("overview"));
+                    System.out.println("tmdb_ID = " + rs.getFloat("tmdb_id"));
+                }
+            }
+            catch(SQLException e)
+            {
+                // if the error message is "out of memory",
+                // it probably means no database file is found
+                System.err.println(e.getMessage());
+                e.printStackTrace();
+            }
+            finally
+            {
+                try
+                {
+                    if(connection != null)
+                        connection.close();
+                }
+                catch(SQLException e)
+                {
+                    // connection close failed.
+                    System.err.println(e.getMessage());
+                }
+            }
+        }
     }
     /**
      * Method to set director.
