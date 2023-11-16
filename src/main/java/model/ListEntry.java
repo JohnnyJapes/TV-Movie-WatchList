@@ -332,6 +332,41 @@ public class ListEntry {
 
     public void deleteRow(ListEntry entry){
 
+        Connection connection = null;
+        try
+        {
+            // create a database connection
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            String sql = "Delete from listentries where id=?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,getID());
+            statement.setQueryTimeout(30);  // set timeout to 30 sec.
+
+            statement.executeUpdate();
+            entry.getEntry().updateRow(entry.getEntry());
+
+        }
+        catch(SQLException e)
+        {
+            // if the error message is "out of memory",
+            // it probably means no database file is found
+            System.err.println(e.getMessage());
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(connection != null)
+                    connection.close();
+            }
+            catch(SQLException e)
+            {
+                // connection close failed.
+                System.err.println(e.getMessage());
+            }
+        }
+
     }
 
 

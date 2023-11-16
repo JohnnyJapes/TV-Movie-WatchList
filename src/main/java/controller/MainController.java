@@ -176,6 +176,9 @@ public class MainController {
     }
     @FXML
     public void deleteButtonClicked() throws IOException{
+        ListEntry selected = currentList.getSelectionModel().getSelectedItem();
+        selected.deleteRow(selected);
+        readContentTable();
 
     }
 
