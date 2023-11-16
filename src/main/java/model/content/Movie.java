@@ -19,19 +19,20 @@ import org.apache.commons.text.StringEscapeUtils;
 
 public class Movie extends ContentBase implements TMDBcompatible {
 
-    private final int contentType = 1; //1 for movies, 2 for TV shows
+
     private Person director;
 
     public Movie(){
         super();
-
         director = new Person();
         watchedEpisodes = 0;
+        contentType = 1; //1 for movies, 2 for TV shows
     }
 
     public Movie(Person director) {
         //topCrew.set(0, director);
         this.director = director;
+        contentType = 1; //1 for movies, 2 for TV shows
     }
 
     /**
@@ -43,16 +44,19 @@ public class Movie extends ContentBase implements TMDBcompatible {
         super(ID);
         topCrew.set(0, director);
         this.director = director;
+        contentType = 1; //1 for movies, 2 for TV shows
     }
 
     public Movie(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast, Person director) {
         super(title, summary, imageLocation, tmdbID, ID, releaseDate, userRating, cast);
         this.director = director;
         topCrew.set(0, director);
+        contentType = 1; //1 for movies, 2 for TV shows
     }
     public Movie(int tmdbID){
         super();
         getTMDBdetails(tmdbID);
+        contentType = 1; //1 for movies, 2 for TV shows
     }
 
     /**
@@ -121,9 +125,8 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 for (int i = 0; i < 7; i++) {
                     if (token == JsonToken.END_ARRAY) break;
                     Movie tempMovie = new Movie();
-                    token = parser.nextToken();
-                    if (token == JsonToken.END_ARRAY) break;
-                    while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
+                    while (!"id".equals(parser.getCurrentName()) && !"total_results".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if ("total_results".equals(parser.getCurrentName())) break;
                     if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
                         token = parser.nextToken();
                         if (token == JsonToken.VALUE_NUMBER_INT) {

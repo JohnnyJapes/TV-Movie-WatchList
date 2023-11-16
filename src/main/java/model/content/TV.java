@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class TV extends ContentBase implements TMDBcompatible {
 
-    private final int contentType = 2; //1 for movies, 2 for tv shows
+
     //series creator
     private ArrayList<Person> creators;
 
@@ -27,16 +27,19 @@ public class TV extends ContentBase implements TMDBcompatible {
         creators = topCrew;
         totalEpisodes = 0;
         watchedEpisodes = 0;
+        contentType = 2; //1 for movies, 2 for tv shows
     }
     public TV(int tmdbID){
         this();
         getTMDBdetails(tmdbID);
+        contentType = 2; //1 for movies, 2 for tv shows
     }
 
     public TV(int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
         this.creators = creators;
+        contentType = 2; //1 for movies, 2 for tv shows
     }
 
     public TV(int ID, int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
@@ -44,6 +47,7 @@ public class TV extends ContentBase implements TMDBcompatible {
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
         this.creators = creators;
+        contentType = 2; //1 for movies, 2 for tv shows
     }
 
     public TV(String title, String summary, String imageLocation, int tmdbID, int ID, LocalDate releaseDate, float userRating, ArrayList<CastMember> cast, int totalEpisodes, int watchedEpisodes, ArrayList<Person> creators) {
@@ -51,6 +55,7 @@ public class TV extends ContentBase implements TMDBcompatible {
         this.totalEpisodes = totalEpisodes;
         this.watchedEpisodes = watchedEpisodes;
         this.creators = creators;
+        contentType = 2; //1 for movies, 2 for tv shows
     }
 
     /**
@@ -249,7 +254,8 @@ public class TV extends ContentBase implements TMDBcompatible {
                     TV tempTV = new TV();
                     token = parser.nextToken();
                     if (token == JsonToken.END_ARRAY) break;
-                    while (!"id".equals(parser.getCurrentName())) token = parser.nextToken();
+                    while (!"id".equals(parser.getCurrentName()) && !"total_results".equals(parser.getCurrentName())) token = parser.nextToken();
+                    if ("total_results".equals(parser.getCurrentName())) break;
                     if (token == JsonToken.FIELD_NAME && "id".equals(parser.getCurrentName())) {
                         token = parser.nextToken();
                         if (token == JsonToken.VALUE_NUMBER_INT) {
