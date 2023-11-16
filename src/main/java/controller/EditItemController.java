@@ -2,20 +2,12 @@ package controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import main.HelloApplication;
 import model.ListEntry;
 import model.Person.Person;
 import model.content.ContentBase;
-import model.content.Movie;
-import model.content.TV;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -27,7 +19,7 @@ public class EditItemController  {
     @FXML
     ImageView tmdbImage;
     @FXML
-    TextField title, director, tmdbID, episodes, rank;
+    TextField title, director, tmdbID, totalEpisodes, rank, watchedEpisodes;
     @FXML
     DatePicker date;
     @FXML
@@ -35,7 +27,7 @@ public class EditItemController  {
     @FXML
     RadioButton movieRadio, tvRadio;
     @FXML
-    Button addItem;
+    Button editItem;
     @FXML
     ToggleGroup contentGroup;
     @FXML
@@ -44,9 +36,17 @@ public class EditItemController  {
 
     protected int currentList;
 
-    protected ListEntry currentEntry = new ListEntry();
-    protected ContentBase content = new ContentBase();
+    protected ListEntry currentEntry;
+    protected ContentBase content;
 
+    @FXML
+    public void start() {
+        disableRadios();
+        initializeChoiceBox();
+        setTextFields();
+        if (content.getContentType() == 1) totalEpisodes.setDisable(true);
+
+    }
 /*    public NewItemController(){
         movieRadio.setToggleGroup(group);
         movieRadio.setSelected(true);
@@ -69,6 +69,7 @@ public class EditItemController  {
         }
     }
 
+    @FXML
     public void disableRadios(){
         if (content.getContentType() == 1) {
             movieRadio.setSelected(true);
@@ -84,11 +85,11 @@ public class EditItemController  {
 
     @FXML
     public void movieRadioSelected(){
-        episodes.setDisable(true);
+        totalEpisodes.setDisable(true);
     }
     @FXML
     public void tvRadioSelected(){
-        episodes.setDisable(false);
+        totalEpisodes.setDisable(false);
     }
 
     /**
@@ -149,23 +150,37 @@ public class EditItemController  {
     /**
      * Sets textfields and datepicker according to currentEntry
      */
+    @FXML
     public void setTextFields(){
         ContentBase result = currentEntry.getEntry();
         rank.setText(Integer.toString(currentEntry.getListRank()));
         director.setText(result.getTopCrew().get(0).getName());
+        watchedEpisodes.setText(Integer.toString(result.getWatchedEpisodes()));
         tmdbID.setText(Integer.toString(result.getTmdbID()));
-        episodes.setText(Integer.toString(result.getTotalEpisodes()));
+        totalEpisodes.setText(Integer.toString(result.getTotalEpisodes()));
         overview.setText(result.getOverview());
         title.setText(result.getTitle());
         date.setValue(result.getReleaseDate());
+
+        switch(currentEntry.getListID()){
+            case 0:
+                listChoice.setValue("To Watch");
+                break;
+            case 1:
+                listChoice.setValue("Watching");
+                break;
+            case 2:
+                listChoice.setValue("Completed");
+        }
     }
 
     /**
-     * Takes user input from input fields
+     * Takes user input from input fields and updates DB
      */
     public void takeUserInput(){
-        content.setWatched(0);
         try {
+            ListEntry entry = new ListEntry();
+
             content.setTitle(title.getText());
             if (tmdbID.getText() == "") tmdbID.setText("-1");
             content.setTmdbID(Integer.parseInt(tmdbID.getText()));
@@ -187,12 +202,25 @@ public class EditItemController  {
                 content.setTotalEpisodes(1);
             }
             else if(tvRadio.isSelected()){
-                content.setTotalEpisodes(Integer.parseInt(episodes.getText()));
+                content.setTotalEpisodes(Integer.parseInt(totalEpisodes.getText()));
                 content.setContentType(2); //tv
             }
             content.setReleaseDate(date.getValue());
-            ListEntry entry = new ListEntry(content, currentList);
-            entry.createRow();
+            content.setWatchedEpisodes(Integer.parseInt(watchedEpisodes.getText()));
+
+            switch(listChoice.getValue()){
+                case "To Watch":
+                    entry.setListID(0);
+                    break;
+                case "Watching":
+                    entry.setListID(1);
+                    break;
+                case "Completed":
+                    entry.setListID(2);
+            }
+            entry.setListRank(Integer.parseInt(rank.getText()));
+            entry.setEntry(content);
+            currentEntry.updateRow(entry);
         }
         catch(Exception e){
             e.printStackTrace();

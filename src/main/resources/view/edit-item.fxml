@@ -355,7 +355,7 @@
             </GridPane>
             <HBox alignment="BOTTOM_RIGHT" prefHeight="43.0" prefWidth="774.0">
                <children>
-                  <Button fx:id="addItem" mnemonicParsing="false" text="Apply Edits" />
+                  <Button fx:id="editItem" mnemonicParsing="false" text="Apply Edits" />
                </children>
                <opaqueInsets>
                   <Insets />

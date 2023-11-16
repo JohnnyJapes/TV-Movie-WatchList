@@ -187,6 +187,7 @@ public class NewItemController {
             }
             content.setReleaseDate(date.getValue());
             ListEntry entry = new ListEntry(content, currentList);
+            entry.setListRank(-1);
             entry.createRow();
         }
         catch(Exception e){

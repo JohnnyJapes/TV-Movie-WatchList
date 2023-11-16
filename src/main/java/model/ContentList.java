@@ -146,13 +146,14 @@ public class ContentList {
 
     }
 
-    public void readWatchingList(){
+    public void readList(int listID){
 
         Connection connection = null;
 
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:local.db");
-            PreparedStatement statement = connection.prepareStatement("select * from listentries where list_id=0");
+            PreparedStatement statement = connection.prepareStatement("select * from listentries where list_id=? Order by rank asc");
+            statement.setInt(1, listID);
 
             ResultSet rs = statement.executeQuery();
             while (rs.next()){
