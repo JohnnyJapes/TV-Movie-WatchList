@@ -535,6 +535,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 temp.readRow(rs.getInt("director_id"));
                 setDirector(temp);
                 watchedEpisodes = rs.getInt("watched_episodes");
+                setTotalEpisodes(1);
 
             }
             //makeImageLocal();

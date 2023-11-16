@@ -561,6 +561,7 @@ public class ContentBase {
                 setDirector(temp);
                 watchedEpisodes = rs.getInt("watched_episodes");
                 contentType = rs.getInt("content_type");
+                setTotalEpisodes(rs.getInt("total_episodes"));
 
             }
             //makeImageLocal();
