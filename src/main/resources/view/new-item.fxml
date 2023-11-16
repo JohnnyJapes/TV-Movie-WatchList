@@ -59,7 +59,7 @@
                            <children>
                               <HBox spacing="10.0">
                                  <children>
-                                    <RadioButton fx:id="movieRadio" mnemonicParsing="false" onAction="#movieRadioSelected" selected="true" text="Movie">
+                                    <RadioButton fx:id="movieRadio" mnemonicParsing="false" onAction="#movieRadioSelected" text="Movie">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="contentGroup" />
                                        </toggleGroup></RadioButton>

@@ -78,8 +78,11 @@ public class NewItemController {
             SearchResultsController controller = fxmlLoader.getController();
             if(movieRadio.isSelected())
                 controller.addList((ArrayList<ContentBase>)new Movie().searchTMDB(title.getText()));
-            else{
+            else if (tvRadio.isSelected()){
                 controller.addList((ArrayList<ContentBase>)new TV().searchTMDB(title.getText()));
+            }
+            else{
+                throw new Exception("No Type Selected");
             }
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -113,6 +116,8 @@ public class NewItemController {
         }
         catch (Exception e){
             e.printStackTrace();
+            Alert error = new Alert(Alert.AlertType.ERROR, e.getMessage());
+            error.show();
         }
 
     }
