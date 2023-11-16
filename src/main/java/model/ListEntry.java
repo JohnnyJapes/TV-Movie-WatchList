@@ -81,7 +81,7 @@ public class ListEntry {
     }
 
     /**
-     * Gets listID.
+     * Gets listID. Determines what list the entry is a part of. 0 watching, 1 completed, 2 plan to watch, 3 abandoned
      *
      * @return int, value of listID
      */
