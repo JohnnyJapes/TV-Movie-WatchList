@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
@@ -30,21 +31,28 @@ public class MainController {
     @FXML
     ImageView poster;
     @FXML
-    Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel;
+    Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel, changingLabel;
     @FXML
     ImageView castImage1;
     @FXML
+    Button toWatchButton, watchingButton, completedButton;
+    @FXML
     public void getSelectedItem(){
+        toWatchButton.getStyleClass().add("current");
         ContentBase selected =  currentList.getSelectionModel().getSelectedItem().getEntry();
-        if (selected.getContentType() == 1)
+        if (selected.getContentType() == 1){
             directorLabel.setText(selected.getTopCrew().get(0).getName());
+            changingLabel.setText("Director:");
+        }
+
         else{
             String creators = "";
+            changingLabel.setText("Creator:");
             for (int i = 0; i < selected.getTopCrew().size(); i++){
                 if ( selected.getTopCrew().size() - i == 1){
-                    creators += selected.getTopCrew().get(i);
+                    creators += selected.getTopCrew().get(i).getName();
                 }
-                else  creators += selected.getTopCrew().get(i) + ", ";
+                else  creators += selected.getTopCrew().get(i).getName() + ", ";
             }
             directorLabel.setText(creators);
         }
@@ -108,14 +116,16 @@ public class MainController {
         catch (Exception e){
             e.printStackTrace();
         }
-
-
     }
     @FXML
     public void editButtonClicked() throws IOException{
-        try{
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/edit-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
+            EditItemController controller = fxmlLoader.getController();
+            ListEntry selected = currentList.getSelectionModel().getSelectedItem();
+            controller.setCurrentEntry(selected);
+            controller.start();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Edit Item");
