@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,10 +15,7 @@ import main.HelloApplication;
 import model.ContentList;
 import model.ListEntry;
 import model.content.ContentBase;
-import model.content.Movie;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import java.io.*;
 
@@ -36,6 +32,23 @@ public class MainController {
     ImageView castImage1;
     @FXML
     Button toWatchButton, watchingButton, completedButton;
+
+    int listID;
+
+    @FXML
+    private void initialize(){
+        listID = 0;
+        toWatchButton.setOnAction(event -> {
+            listID=0;
+        });
+        watchingButton.setOnAction(event -> {
+            listID=1;
+        });
+        completedButton.setOnAction(event -> {
+            listID=2;
+        });
+        readContentTable();
+    }
     @FXML
     public void getSelectedItem(){
         toWatchButton.getStyleClass().add("current");
@@ -132,6 +145,15 @@ public class MainController {
             stage.setResizable(false);
             stage.setScene(new Scene(root1));
             stage.show();
+
+            controller.editItem.setOnAction(event -> {
+                controller.takeUserInput();
+                stage.close();
+                readContentTable();
+            });
+            stage.setOnCloseRequest((event) -> {
+                readContentTable();
+            });
         }
         catch (Exception e){
             e.printStackTrace();
@@ -145,7 +167,7 @@ public class MainController {
 
     public void readContentTable(){
         ContentList list = new ContentList();
-        list.readWatchingList();
+        list.readList(listID);
         setCurrentList(list);
         return;
     }
