@@ -286,7 +286,7 @@
                         <Insets left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <TextArea fx:id="overview" prefHeight="90.0" prefWidth="429.0" />
+                        <TextArea fx:id="overview" prefHeight="90.0" prefWidth="429.0" wrapText="true" />
                      </children>
                   </HBox>
                </children>
