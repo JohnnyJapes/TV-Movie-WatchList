@@ -38,20 +38,33 @@ public class MainController {
     @FXML
     private void initialize(){
         listID = 0;
+        toWatchButton.getStyleClass().add("current");
         toWatchButton.setOnAction(event -> {
+            completedButton.getStyleClass().remove("current");
+            watchingButton.getStyleClass().remove("current");
+            toWatchButton.getStyleClass().add("current");
             listID=0;
+            readContentTable();
         });
         watchingButton.setOnAction(event -> {
+            toWatchButton.getStyleClass().remove("current");
+            completedButton.getStyleClass().remove("current");
+            watchingButton.getStyleClass().add("current");
             listID=1;
+            readContentTable();
         });
         completedButton.setOnAction(event -> {
+            watchingButton.getStyleClass().remove("current");
+            toWatchButton.getStyleClass().remove("current");
+            completedButton.getStyleClass().add("current");
             listID=2;
+            readContentTable();
         });
         readContentTable();
     }
     @FXML
     public void getSelectedItem(){
-        toWatchButton.getStyleClass().add("current");
+
         ContentBase selected =  currentList.getSelectionModel().getSelectedItem().getEntry();
         if (selected.getContentType() == 1){
             directorLabel.setText(selected.getTopCrew().get(0).getName());
@@ -110,7 +123,7 @@ public class MainController {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             NewItemController controller = fxmlLoader.getController();
-            controller.setCurrentList(0);       //TODO: make application read from GUI which list is currently selected
+            controller.setCurrentList(listID);       //TODO: make application read from GUI which list is currently selected
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("New Item");
@@ -138,6 +151,7 @@ public class MainController {
             EditItemController controller = fxmlLoader.getController();
             ListEntry selected = currentList.getSelectionModel().getSelectedItem();
             controller.setCurrentEntry(selected);
+            controller.setCurrentList(listID);
             controller.start();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);

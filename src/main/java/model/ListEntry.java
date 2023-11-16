@@ -275,7 +275,7 @@ public class ListEntry {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
-            statement.setInt(1, getListID());
+            statement.setInt(1, entry.getListID());
             statement.setInt(2, entry.getEntry().getID());
             statement.setInt(3, entry.getListRank());
             statement.setInt(4, getID());
@@ -295,12 +295,12 @@ public class ListEntry {
                 if(entry.getListRank() > 0){
                     PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where rank=? AND list_id=?");
                     rankGet.setInt(1, entry.getListRank());
-                    rankGet.setInt(2, getListID());
+                    rankGet.setInt(2, entry.getListID());
                     ResultSet rsLast = rankGet.executeQuery();
                     while(rsLast.next()){
                         int lastRank = rsLast.getInt("rank");
                         if (lastRank == entry.getListRank())
-                            updateRanks(entry.getListRank(), connection);
+                            updateRanks(entry.getListRank(), entry.getListID(), connection);
                     }
                 }
             }
@@ -338,14 +338,15 @@ public class ListEntry {
     /**
      * Method adds one to every rank equal to the provided rank, freeing up the space to insert that rank
      * @param rank
+     * @param listID
      * @param connection
      */
-    private void updateRanks(int rank, Connection connection){
+    private void updateRanks(int rank, int listID, Connection connection){
         String sql = "Update listentries SET rank=rank+1 where rank >=? AND list_id=? AND rank < ?" ;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, rank);
-            statement.setInt(2, getListID());
+            statement.setInt(2, listID);
             statement.setInt(3, getListRank());
             statement.executeUpdate();
 
