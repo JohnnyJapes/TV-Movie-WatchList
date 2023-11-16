@@ -703,7 +703,6 @@ public class Person {
                 + "Birthday: " + this.getBirthday().toString()  + "\n"
                 + "TMDB ID: " + this.getTmdbID()  + "\n";
 
-        System.out.println(str);
         return str;
 
     }
