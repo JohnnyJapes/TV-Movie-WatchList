@@ -20,17 +20,17 @@
    <top>
       <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css" BorderPane.alignment="CENTER">
         <buttons>
-            <Button alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
+            <Button fx:id="completedButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Watching" textFill="WHITE">
+            <Button fx:id="watchingButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Watching" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
             </Button>
-            <Button alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
+            <Button fx:id="toWatchButton" alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -86,7 +86,7 @@
                               </Label>
                               <HBox alignment="CENTER_RIGHT">
                                  <children>
-                                    <Label text="Director:">
+                                    <Label fx:id="changingLabel" text="Director:">
                                        <font>
                                           <Font name="System Bold" size="20.0" />
                                        </font>
