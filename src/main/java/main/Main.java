@@ -18,6 +18,11 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/main-view.fxml"));
+        //check that database exists before loading the fxml.
+        if(checkVersion()){
+            Tables.refreshDatabase();
+        };
+
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("TV-Movie Watchlists");
         stage.setResizable(false);
@@ -28,9 +33,7 @@ public class Main extends Application {
         //ContentList temp = new ContentList();
         //new RefreshDatabase();
 
-        if(!checkVersion()){
-            Tables.refreshDatabase();
-        };
+
 
 
         //default list when opening is watching
@@ -65,6 +68,15 @@ public class Main extends Application {
 
         Boolean result = ver.createNewFile();
 
-        return !result;
+        //check local db exists
+        path = "local.db";
+
+        ver = new File(path);
+        if (ver.createNewFile()) {
+            result = true;
+            System.out.println("LOCAL CHECK: " + result);
+        }
+
+        return result;
     }
 }
