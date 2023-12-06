@@ -146,6 +146,10 @@ public class ContentList {
 
     }
 
+    /**
+     * Read from contentList table specified by listID
+     * @param listID - 0 watching, 1 completed, 2 plan to watch, 3 abandoned
+     */
     public void readList(int listID){
 
         Connection connection = null;
@@ -165,5 +169,50 @@ public class ContentList {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Search current content List in all fields for search term
+     * @param searchFilter
+     * @return
+     */
+    public ContentList search(String searchFilter){
+        ContentList searchResults = new ContentList();
+
+        for (ListEntry entry : listEntries){
+            Boolean found = false;
+            ContentBase content = entry.getEntry();
+            Person topCrew = content.getTopCrew().get(0);
+            ArrayList<CastMember> cast = content.getCast();
+
+            //search for search term, single loop just so break works
+            for (int j = 0; j < 1; j++) {
+                if (content.getTitle().contains(searchFilter)) {
+                    found = true;
+                    break;
+                }
+                if (topCrew.getName().contains(searchFilter)) {
+                    found = true;
+                    break;
+                }
+                for (int i = 0; i < cast.size(); i++) {
+                    if (cast.get(0).getPerson().getName().contains(searchFilter)) {
+                        found = true;
+                        break;
+                    }
+                    if (cast.get(0).getCharacter().contains(searchFilter)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (found){
+                searchResults.listEntries.add(entry);
+            }
+        }
+
+
+
+        return searchResults;
     }
 }

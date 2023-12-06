@@ -40,7 +40,7 @@ public class MainController {
 
     int listID;
 
-    private ListView<ListEntry> fullList;
+    private ContentList fullList;
 
     @FXML
     private void initialize(){
@@ -67,7 +67,7 @@ public class MainController {
             listID=2;
             readContentTable();
         });
-        fullList = new ListView<>();
+        fullList = new ContentList();
         readContentTable();
     }
     @FXML
@@ -201,12 +201,24 @@ public class MainController {
         String searchText;
         try{
             searchText = searchBox.getText();
+            if (fullList.getListEntries().size() < 1){
+                fullList.getListEntries().clear();
+                fullList.getListEntries().addAll(currentList.getItems());
+            }
 
+
+            //
+            ContentList searchResults = fullList.search(searchText);
+            setCurrentList(searchResults);
         }
         catch (Error e){
             e.printStackTrace();
 
         }
+    }
+
+    public void clearSearch(){
+        setCurrentList(fullList);
     }
 
 }
