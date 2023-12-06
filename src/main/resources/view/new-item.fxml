@@ -291,10 +291,13 @@
                   </HBox>
                </children>
             </GridPane>
-            <HBox alignment="BOTTOM_RIGHT" prefHeight="43.0" prefWidth="774.0">
+            <HBox alignment="BOTTOM_RIGHT" prefHeight="81.0" prefWidth="774.0">
                <children>
                   <Button fx:id="addItem" mnemonicParsing="false" text="Add Item" />
                </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>
