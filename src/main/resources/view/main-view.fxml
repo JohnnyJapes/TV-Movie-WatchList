@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="674.0" maxWidth="1062.0" minHeight="674.0" minWidth="891.0" prefHeight="674.0" prefWidth="1062.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<BorderPane maxHeight="720.0" maxWidth="1062.0" minHeight="720.0" minWidth="891.0" prefHeight="674.0" prefWidth="1062.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <top>
-      <VBox prefHeight="136.0" prefWidth="1062.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="84.0" prefWidth="1062.0" BorderPane.alignment="CENTER">
          <children>
             <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css">
               <buttons>
@@ -40,7 +40,7 @@
                   </Button>
               </buttons>
             </ButtonBar>
-            <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="1062.0" spacing="10.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1062.0" spacing="10.0">
                <children>
                   <Label text="Search:">
                      <font>
@@ -51,6 +51,9 @@
                   <Button mnemonicParsing="false" onAction="#search" stylesheets="@mainCSS.css" text="Search" />
                   <Button layoutX="387.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearSearch" stylesheets="@mainCSS.css" text="Clear Filter" />
                </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
             </HBox>
          </children>
       </VBox>
