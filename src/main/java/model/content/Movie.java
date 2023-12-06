@@ -429,7 +429,10 @@ public class Movie extends ContentBase implements TMDBcompatible {
             getTMDBdetails(getTmdbID());
             createRow();
         }
-        else setID(found);
+        else {
+            setID(found);
+            this.readRow(found);
+        }
         return;
     }
 
