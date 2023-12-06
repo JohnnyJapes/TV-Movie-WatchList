@@ -49,6 +49,7 @@
                   </Label>
                   <TextField fx:id="searchBox" onAction="#search" prefHeight="24.0" prefWidth="291.0" promptText="Search List" />
                   <Button mnemonicParsing="false" onAction="#search" stylesheets="@mainCSS.css" text="Search" />
+                  <Button layoutX="387.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearSearch" stylesheets="@mainCSS.css" text="Clear Filter" />
                </children>
             </HBox>
          </children>
