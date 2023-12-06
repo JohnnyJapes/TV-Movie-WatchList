@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
@@ -29,11 +30,17 @@ public class MainController {
     @FXML
     Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel, changingLabel;
     @FXML
-    ImageView castImage1;
+    Label characterLabel2, actorLabel2, characterLabel3, actorLabel3;
+    @FXML
+    ImageView castImage1, castImage2, castImage3;
     @FXML
     Button toWatchButton, watchingButton, completedButton;
+    @FXML
+    TextField searchBox;
 
     int listID;
+
+    private ListView<ListEntry> fullList;
 
     @FXML
     private void initialize(){
@@ -60,6 +67,7 @@ public class MainController {
             listID=2;
             readContentTable();
         });
+        fullList = new ListView<>();
         readContentTable();
     }
     @FXML
@@ -187,6 +195,18 @@ public class MainController {
         list.readList(listID);
         setCurrentList(list);
         return;
+    }
+
+    public void search(){
+        String searchText;
+        try{
+            searchText = searchBox.getText();
+
+        }
+        catch (Error e){
+            e.printStackTrace();
+
+        }
     }
 
 }
