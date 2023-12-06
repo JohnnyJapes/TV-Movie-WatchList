@@ -344,6 +344,7 @@ public class ListEntry {
 
             statement.executeUpdate();
             entry.getEntry().updateRow(entry.getEntry());
+            shrinkRanks(entry.getListRank(), entry.getListID());
 
         }
         catch(SQLException e)
