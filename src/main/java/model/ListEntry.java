@@ -390,6 +390,26 @@ public class ListEntry {
         }
 
     }
+    /**
+     * When list shrinks due to moving entry to another list, shrink all upper ranks to one lower rank.
+     * @param rank
+     * @param listID
+     */
+    public void shrinkRanks(int rank, int listID){
+        String sql = "Update listentries SET rank=rank-1 where rank >=? AND list_id=?" ;
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, rank);
+            statement.setInt(2, listID);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 
 }
