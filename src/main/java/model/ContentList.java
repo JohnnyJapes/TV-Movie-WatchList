@@ -196,11 +196,11 @@ public class ContentList {
                     break;
                 }
                 for (int i = 0; i < cast.size(); i++) {
-                    if (cast.get(0).getPerson().getName().contains(searchFilter)) {
+                    if (cast.get(i).getPerson().getName().contains(searchFilter)) {
                         found = true;
                         break;
                     }
-                    if (cast.get(0).getCharacter().contains(searchFilter)) {
+                    if (cast.get(i).getCharacter().contains(searchFilter)) {
                         found = true;
                         break;
                     }
