@@ -300,7 +300,7 @@ public class ListEntry {
                     while(rsLast.next()){
                         int lastRank = rsLast.getInt("rank");
                         if (lastRank == entry.getListRank())
-                            updateRanks(entry.getListRank(), entry.getListID(), connection);
+                            updateRanksSameList(entry.getListRank(), entry.getListID(), connection);
                     }
                 }
                 if(entry.getListRank() > getListRank()){
@@ -315,7 +315,7 @@ public class ListEntry {
                     }
                 }
             }
-            else{
+            else if (getListID() != entry.getListID()){
                 PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where rank=? AND list_id=?");
                 rankGet.setInt(1, entry.getListRank());
                 rankGet.setInt(2, entry.getListID());
@@ -323,7 +323,7 @@ public class ListEntry {
                 while(rsLast.next()){
                     int lastRank = rsLast.getInt("rank");
                     if (lastRank == entry.getListRank())
-                        updateRanks(entry.getListRank(), entry.getListID(), connection);
+                        updateRanksDifferentList(entry.getListRank(), entry.getListID(), connection);
                 }
             }
             statement.executeUpdate();
@@ -394,18 +394,37 @@ public class ListEntry {
 
 
     /**
-     * Method adds one to every rank equal to the provided rank, freeing up the space to insert that rank
+     * Method adds one to every rank equal to the provided rank, freeing up the space to insert that rank, in the same list
      * @param rank
      * @param listID
      * @param connection
      */
-    private void updateRanks(int rank, int listID, Connection connection){
+    private void updateRanksSameList(int rank, int listID, Connection connection){
         String sql = "Update listentries SET rank=rank+1 where rank >=? AND list_id=? AND rank < ?" ;
         try {
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, rank);
             statement.setInt(2, listID);
             statement.setInt(3, getListRank());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    /**
+     * Method adds one to every rank equal to the provided rank, freeing up the space to insert that rank
+     * @param rank
+     * @param listID
+     * @param connection
+     */
+    private void updateRanksDifferentList(int rank, int listID, Connection connection){
+        String sql = "Update listentries SET rank=rank+1 where rank >=? AND list_id=?" ;
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, rank);
+            statement.setInt(2, listID);
             statement.executeUpdate();
 
         } catch (SQLException e) {
