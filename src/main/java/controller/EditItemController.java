@@ -218,8 +218,10 @@ public class EditItemController  {
                 case "Completed":
                     entry.setListID(2);
             }
+            //fix numbering if entry is changing lists
             if (currentEntry.getListID() != entry.getListID()){
-                currentEntry.shrinkRanks(currentEntry.getListRank(), currentEntry.getListID() );
+                currentEntry.shrinkAllRanks(currentEntry.getListRank(), currentEntry.getListID());
+
             }
             entry.setListRank(Integer.parseInt(rank.getText()));
             entry.setEntry(content);

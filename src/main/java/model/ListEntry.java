@@ -280,7 +280,7 @@ public class ListEntry {
             statement.setInt(3, entry.getListRank());
             statement.setInt(4, getID());
 
-            if (getListRank() != entry.getListRank()){
+            if (getListRank() != entry.getListRank() && getListID() == entry.getListID()){
                 if (entry.getListRank() < 1) {
                     PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where id=? order by rank desc limit 1");
                     rankGet.setInt(1, getID());
@@ -292,7 +292,7 @@ public class ListEntry {
                     else statement.setInt(3, 99);
                 }
 
-                if(entry.getListRank() > 0){
+                if(entry.getListRank() < getListRank()){
                     PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where rank=? AND list_id=?");
                     rankGet.setInt(1, entry.getListRank());
                     rankGet.setInt(2, entry.getListID());
@@ -302,6 +302,28 @@ public class ListEntry {
                         if (lastRank == entry.getListRank())
                             updateRanks(entry.getListRank(), entry.getListID(), connection);
                     }
+                }
+                if(entry.getListRank() > getListRank()){
+                    PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where rank=? AND list_id=?");
+                    rankGet.setInt(1, entry.getListRank());
+                    rankGet.setInt(2, entry.getListID());
+                    ResultSet rsLast = rankGet.executeQuery();
+                    while(rsLast.next()){
+                        int lastRank = rsLast.getInt("rank");
+                        if (lastRank == entry.getListRank())
+                            shrinkRanks(getListRank(), entry.getListID(), entry.getListRank(), connection);
+                    }
+                }
+            }
+            else{
+                PreparedStatement rankGet = connection.prepareStatement("select rank from listentries where rank=? AND list_id=?");
+                rankGet.setInt(1, entry.getListRank());
+                rankGet.setInt(2, entry.getListID());
+                ResultSet rsLast = rankGet.executeQuery();
+                while(rsLast.next()){
+                    int lastRank = rsLast.getInt("rank");
+                    if (lastRank == entry.getListRank())
+                        updateRanks(entry.getListRank(), entry.getListID(), connection);
                 }
             }
             statement.executeUpdate();
@@ -344,7 +366,7 @@ public class ListEntry {
 
             statement.executeUpdate();
             entry.getEntry().updateRow(entry.getEntry());
-            shrinkRanks(entry.getListRank(), entry.getListID());
+            shrinkAllRanks(entry.getListRank(), entry.getListID());
 
         }
         catch(SQLException e)
@@ -396,14 +418,35 @@ public class ListEntry {
      * @param rank
      * @param listID
      */
-    public void shrinkRanks(int rank, int listID){
-        String sql = "Update listentries SET rank=rank-1 where rank >=? AND list_id=?" ;
+    public void shrinkAllRanks(int rank, int listID){
+        String sql = "Update listentries SET rank=rank-1 where rank >=? AND list_id=?"  ;
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:local.db");
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, rank);
             statement.setInt(2, listID);
+
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    /**
+     * For when updating from a lower number to a higher number and the higher number is in use
+     * @param rank
+     * @param listID
+     */
+    private void shrinkRanks(int rank, int listID, int highRank, Connection connection){
+        String sql = "Update listentries SET rank=rank-1 where rank >=? AND list_id=? AND rank <= ?" ;
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, rank);
+            statement.setInt(2, listID);
+            statement.setInt(3, highRank);
             statement.executeUpdate();
 
         } catch (SQLException e) {
