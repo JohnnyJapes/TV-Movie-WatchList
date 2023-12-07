@@ -201,6 +201,14 @@ public class TV extends ContentBase implements TMDBcompatible {
                     this.setOverview(parser.getText());
                 }
             }
+            while(!"poster_path".equals(parser.getCurrentName()) ) token = parser.nextToken();
+            if (token == JsonToken.FIELD_NAME && "poster_path".equals(parser.getCurrentName())) {
+                token = parser.nextToken();
+                if (token == JsonToken.VALUE_STRING) {
+                    // System.out.println("overview : " + parser.getText());
+                    this.setImageURL(parser.getText());
+                }
+            }
 
 
             //close the parser
