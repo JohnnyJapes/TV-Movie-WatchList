@@ -131,6 +131,7 @@ public class TV extends ContentBase implements TMDBcompatible {
             createRow();
         }
         else setID(found);
+        this.readRow(found);
         return;
     }
 

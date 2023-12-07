@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
@@ -29,11 +30,17 @@ public class MainController {
     @FXML
     Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel, changingLabel;
     @FXML
-    ImageView castImage1;
+    Label characterLabel2, actorLabel2, characterLabel3, actorLabel3;
+    @FXML
+    ImageView castImage1, castImage2, castImage3;
     @FXML
     Button toWatchButton, watchingButton, completedButton;
+    @FXML
+    TextField searchBox;
 
     int listID;
+
+    private ContentList fullList;
 
     @FXML
     private void initialize(){
@@ -60,6 +67,7 @@ public class MainController {
             listID=2;
             readContentTable();
         });
+        fullList = new ContentList();
         readContentTable();
     }
     @FXML
@@ -87,12 +95,42 @@ public class MainController {
 
         yearLabel.setText(Integer.toString(selected.getReleaseDate().getYear()));
         overviewLabel.setText(selected.getOverview());
+
+        OkHttpClient client = new OkHttpClient();
         characterLabel.setText(selected.getCast().get(0).getCharacter());
         actorLabel.setText(selected.getCast().get(0).getPerson().getName());
-        OkHttpClient client = new OkHttpClient();
         System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
         Image image = new Image(selected.getCast().get(0).getPerson().getImage());
         castImage1.setImage(image);
+
+        //2nd cast member
+        try{
+            characterLabel2.setText(selected.getCast().get(1).getCharacter());
+            actorLabel2.setText(selected.getCast().get(1).getPerson().getName());
+            System.out.println("ID PIC: " + selected.getCast().get(1).getPerson().getID());
+            image = new Image(selected.getCast().get(1).getPerson().getImage());
+            castImage2.setImage(image);
+        }
+        catch (Error e){
+            e.printStackTrace();
+            characterLabel2.setVisible(false);
+            actorLabel2.setVisible(false);
+            castImage2.setVisible(false);
+        }
+        //3rd cast member
+        try{
+            characterLabel3.setText(selected.getCast().get(2).getCharacter());
+            actorLabel3.setText(selected.getCast().get(2).getPerson().getName());
+            System.out.println("ID PIC: " + selected.getCast().get(2).getPerson().getID());
+            image = new Image(selected.getCast().get(2).getPerson().getImage());
+            castImage3.setImage(image);
+        }
+        catch (Error e){
+            e.printStackTrace();
+            characterLabel2.setVisible(false);
+            actorLabel2.setVisible(false);
+            castImage2.setVisible(false);
+        }
     }
 
     public void setCurrentList(ContentList list){
@@ -187,6 +225,39 @@ public class MainController {
         list.readList(listID);
         setCurrentList(list);
         return;
+    }
+
+    /**
+     * Search for text given in GUI
+     */
+    @FXML
+    public void search(){
+        String searchText;
+        try{
+            searchText = searchBox.getText();
+            if (fullList.getListEntries().size() < 1){
+                fullList.getListEntries().clear();
+                fullList.getListEntries().addAll(currentList.getItems());
+            }
+
+
+            //
+            ContentList searchResults = fullList.search(searchText);
+            setCurrentList(searchResults);
+        }
+        catch (Error e){
+            e.printStackTrace();
+
+        }
+    }
+
+    /**
+     * Clear Search results
+     */
+    @FXML
+    public void clearSearch(){
+        setCurrentList(fullList);
+        searchBox.clear();
     }
 
 }

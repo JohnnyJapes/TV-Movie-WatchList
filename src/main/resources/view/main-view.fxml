@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -16,27 +17,46 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="674.0" maxWidth="1062.0" minHeight="674.0" minWidth="891.0" prefHeight="674.0" prefWidth="1062.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<BorderPane maxHeight="720.0" maxWidth="1062.0" minHeight="720.0" minWidth="891.0" prefHeight="674.0" prefWidth="1062.0" stylesheets="@mainCSS.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <top>
-      <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css" BorderPane.alignment="CENTER">
-        <buttons>
-            <Button fx:id="completedButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="watchingButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Watching" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-            <Button fx:id="toWatchButton" alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-            </Button>
-        </buttons>
-      </ButtonBar>
+      <VBox prefHeight="84.0" prefWidth="1062.0" BorderPane.alignment="CENTER">
+         <children>
+            <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" styleClass="ButtonBar" stylesheets="@mainCSS.css">
+              <buttons>
+                  <Button fx:id="completedButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Completed" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="watchingButton" alignment="CENTER" layoutX="810.0" layoutY="15.0" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="Watching" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="toWatchButton" alignment="CENTER" mnemonicParsing="false" styleClass="navButton" stylesheets="@mainCSS.css" text="To Watch" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Button>
+              </buttons>
+            </ButtonBar>
+            <HBox alignment="CENTER_LEFT" prefHeight="43.0" prefWidth="1062.0" spacing="10.0">
+               <children>
+                  <Label text="Search:">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="searchBox" onAction="#search" prefHeight="24.0" prefWidth="291.0" promptText="Search List" />
+                  <Button mnemonicParsing="false" onAction="#search" stylesheets="@mainCSS.css" text="Search" />
+                  <Button layoutX="387.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearSearch" stylesheets="@mainCSS.css" text="Clear Filter" />
+               </children>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
    </top>
    <left>
       <SplitPane dividerPositions="0.1820250284414107" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="634.0" prefWidth="1062.0" BorderPane.alignment="CENTER">
@@ -149,7 +169,7 @@
                               </HBox>
                            </children>
                         </GridPane>
-                        <Label fx:id="overviewLabel" alignment="CENTER" text="A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time." textAlignment="CENTER" wrapText="true">
+                        <Label fx:id="overviewLabel" alignment="CENTER" prefHeight="116.0" prefWidth="558.0" text="A burger-loving hit man, his philosophical partner, a drug-addled gangster's moll and a washed-up boxer converge in this sprawling, comedic crime caper. Their adventures unfurl in three stories that ingeniously trip back and forth in time." textAlignment="CENTER" wrapText="true">
                            <padding>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </padding>
@@ -211,6 +231,58 @@
                                     <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0">
                                        <children>
                                           <Label fx:id="actorLabel" text="Actor">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="10.0" layoutY="10.0" GridPane.columnIndex="1">
+                                 <children>
+                                    <ImageView fx:id="castImage2" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="characterLabel2" text="Character">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0">
+                                       <children>
+                                          <Label fx:id="actorLabel2" text="Actor">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="CENTER" layoutX="196.0" layoutY="10.0" GridPane.columnIndex="2">
+                                 <children>
+                                    <ImageView fx:id="castImage3" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label fx:id="characterLabel3" text="Character">
+                                             <font>
+                                                <Font name="System Bold" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="CENTER" layoutX="10.0" layoutY="160.0">
+                                       <children>
+                                          <Label fx:id="actorLabel3" text="Actor">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
