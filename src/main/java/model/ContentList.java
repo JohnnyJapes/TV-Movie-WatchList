@@ -186,21 +186,22 @@ public class ContentList {
             ArrayList<CastMember> cast = content.getCast();
 
             //search for search term, single loop just so break works
+            //all to lower case
             for (int j = 0; j < 1; j++) {
-                if (content.getTitle().contains(searchFilter)) {
+                if (content.getTitle().toLowerCase().contains(searchFilter.toLowerCase())) {
                     found = true;
                     break;
                 }
-                if (topCrew.getName().contains(searchFilter)) {
+                if (topCrew.getName().toLowerCase().contains(searchFilter.toLowerCase())) {
                     found = true;
                     break;
                 }
                 for (int i = 0; i < cast.size(); i++) {
-                    if (cast.get(i).getPerson().getName().contains(searchFilter)) {
+                    if (cast.get(i).getPerson().getName().toLowerCase().contains(searchFilter.toLowerCase())) {
                         found = true;
                         break;
                     }
-                    if (cast.get(i).getCharacter().contains(searchFilter)) {
+                    if (cast.get(i).getCharacter().toLowerCase().contains(searchFilter.toLowerCase())) {
                         found = true;
                         break;
                     }
