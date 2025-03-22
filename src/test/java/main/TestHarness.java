@@ -1,3 +1,4 @@
+package main;
 
 import model.Person.Person;
 import model.TMDBcompatible;
