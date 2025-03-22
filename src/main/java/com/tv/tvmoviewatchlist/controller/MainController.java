@@ -1,4 +1,4 @@
-package controller;
+package com.tv.tvmoviewatchlist.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,10 +12,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.Main;
-import model.ContentList;
-import model.ListEntry;
-import model.content.ContentBase;
+import com.tv.tvmoviewatchlist.main.Main;
+import com.tv.tvmoviewatchlist.model.ContentList;
+import com.tv.tvmoviewatchlist.model.ListEntry;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
 import okhttp3.OkHttpClient;
 
 import java.io.*;

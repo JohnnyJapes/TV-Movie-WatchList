@@ -1,4 +1,4 @@
-package model;
+package com.tv.tvmoviewatchlist.model;
 
 public class User {
     String userName;

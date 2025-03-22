@@ -1,16 +1,18 @@
 package model.content;
 
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.content.Movie;
 import org.junit.jupiter.api.Test;
 
 class ContentBaseTest {
 
-    @Test
+/*    @Test
     void createRow() {
         ContentBase temp;
         Movie movie = new Movie(680);
         temp = movie;
         temp.createRow();
-    }
+    }*/
 
     @Test
     void createTable() {

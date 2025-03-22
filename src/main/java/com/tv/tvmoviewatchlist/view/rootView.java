@@ -1,12 +1,12 @@
-package view;
+package com.tv.tvmoviewatchlist.view;
 
+import com.tv.tvmoviewatchlist.main.Main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.Main;
 
 import java.io.IOException;
 

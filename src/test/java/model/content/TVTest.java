@@ -1,6 +1,7 @@
 package model.content;
 
-import model.Person.Person;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.content.TV;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

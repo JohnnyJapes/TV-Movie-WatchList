@@ -1,8 +1,4 @@
-package model;
-
-import model.Person.Person;
-import model.connectors.CastMember;
-import model.content.Movie;
+package com.tv.tvmoviewatchlist.model;
 
 import java.io.File;
 import java.sql.Connection;

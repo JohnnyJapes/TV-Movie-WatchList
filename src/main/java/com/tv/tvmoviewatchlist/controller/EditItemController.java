@@ -1,13 +1,13 @@
-package controller;
+package com.tv.tvmoviewatchlist.controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import model.ListEntry;
-import model.Person.Person;
-import model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.ListEntry;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

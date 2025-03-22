@@ -1,22 +1,21 @@
-package main;
+package com.tv.tvmoviewatchlist.main;
 
-import controller.MainController;
+import com.tv.tvmoviewatchlist.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.ContentList;
-import model.Tables;
+import com.tv.tvmoviewatchlist.model.ContentList;
+import com.tv.tvmoviewatchlist.model.Tables;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-
+        Class x = this.getClass();
+        System.out.println(x.getCanonicalName());
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/main-view.fxml"));
         //check that database exists before loading the fxml.
         if(checkVersion()){
@@ -30,7 +29,7 @@ public class Main extends Application {
         ContentList current = new ContentList();
 
         //ContentList temp = new ContentList();
-        //new RefreshDatabase();
+        //new main.RefreshDatabase();
 
 
 

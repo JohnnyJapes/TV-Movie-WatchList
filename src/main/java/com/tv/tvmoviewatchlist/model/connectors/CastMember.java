@@ -1,7 +1,7 @@
-package model.connectors;
+package com.tv.tvmoviewatchlist.model.connectors;
 
-import model.Person.Person;
-import model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
 
 import java.sql.*;
 

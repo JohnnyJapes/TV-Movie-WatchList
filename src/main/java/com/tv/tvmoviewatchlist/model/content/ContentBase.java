@@ -1,10 +1,10 @@
-package model.content;
+package com.tv.tvmoviewatchlist.model.content;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import model.Person.Person;
-import model.connectors.CastMember;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

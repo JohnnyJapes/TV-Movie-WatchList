@@ -1,8 +1,8 @@
-package model;
+package com.tv.tvmoviewatchlist.model;
 
-import model.Person.Person;
-import model.connectors.CastMember;
-import model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.connectors.CastMember;
 
 import java.sql.*;
 import java.util.ArrayList;

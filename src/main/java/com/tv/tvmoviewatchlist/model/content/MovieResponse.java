@@ -1,4 +1,4 @@
-package model.content;
+package com.tv.tvmoviewatchlist.model.content;
 
 public class MovieResponse {
 

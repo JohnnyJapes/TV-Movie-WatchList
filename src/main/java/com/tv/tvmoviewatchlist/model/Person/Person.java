@@ -1,9 +1,9 @@
-package model.Person;
+package com.tv.tvmoviewatchlist.model.Person;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

@@ -1,9 +1,9 @@
-package model.content;
+package com.tv.tvmoviewatchlist.model.content;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import model.Person.Person;
+import com.tv.tvmoviewatchlist.model.Person.Person;
 
 import java.io.*;
 import java.sql.*;
@@ -11,8 +11,8 @@ import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import model.TMDBcompatible;
-import model.connectors.CastMember;
+import com.tv.tvmoviewatchlist.model.TMDBcompatible;
+import com.tv.tvmoviewatchlist.model.connectors.CastMember;
 import okhttp3.OkHttpClient;
 import okhttp3.*;
 import org.apache.commons.text.StringEscapeUtils;

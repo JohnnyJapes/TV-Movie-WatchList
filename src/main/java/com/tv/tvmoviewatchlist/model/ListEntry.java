@@ -1,7 +1,7 @@
-package model;
+package com.tv.tvmoviewatchlist.model;
 
-import model.content.ContentBase;
-import model.content.Movie;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.content.Movie;
 
 import java.sql.*;
 

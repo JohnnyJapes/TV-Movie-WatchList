@@ -1,12 +1,11 @@
 package main;
 
-import model.Person.Person;
-import model.TMDBcompatible;
-import model.content.ContentBase;
-import model.content.Movie;
-import model.content.TV;
+import com.tv.tvmoviewatchlist.model.Person.Person;
+import com.tv.tvmoviewatchlist.model.TMDBcompatible;
+import com.tv.tvmoviewatchlist.model.content.ContentBase;
+import com.tv.tvmoviewatchlist.model.content.Movie;
+import com.tv.tvmoviewatchlist.model.content.TV;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class TestHarness {
