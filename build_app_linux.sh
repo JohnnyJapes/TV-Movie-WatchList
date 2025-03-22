@@ -44,7 +44,7 @@ detected_modules=`$JAVA_HOME/bin/jdeps \
   --ignore-missing-deps \
   --print-module-deps \
   --class-path "target/installer/input/libs/*" \
-    target/classes/com/tv/tvmovewatchlist/main/Main.class`
+    target/classes/com/tv/tvmoviewatchlist/main/Main.class`
 echo "detected modules: ${detected_modules}"
 
 
@@ -60,7 +60,7 @@ echo "detected modules: ${detected_modules}"
 #
 # Don't forget the leading ','!
 
-manual_modules=,jdk.crypto.ec,jdk.localedata
+manual_modules=,jdk.crypto.ec,jdk.localedata,
 echo "manual modules: ${manual_modules}"
 
 # ------ RUNTIME IMAGE ------------------------------------------------------
@@ -90,11 +90,10 @@ $JAVA_HOME/bin/jpackage \
 --dest target/installer \
 --input target/installer/input/libs \
 --name JPackageScriptFX \
---main-class com.dlsc.jpackagefx.AppLauncher \
+--main-class com.tv.tvmoviewatchlist.main.AppLauncher \
 --main-jar ${MAIN_JAR} \
 --java-options -Xmx2048m \
 --runtime-image target/java-runtime \
---icon src/main/logo/linux/duke.png \
 --app-version ${APP_VERSION} \
 --vendor "ACME Inc." \
 --copyright "Copyright © 2019-21 ACME Inc."
