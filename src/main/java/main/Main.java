@@ -17,12 +17,11 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/main-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/main-view.fxml"));
         //check that database exists before loading the fxml.
         if(checkVersion()){
             Tables.refreshDatabase();
         };
-
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("TV-Movie Watchlists");
         stage.setResizable(false);
@@ -54,7 +53,7 @@ public class Main extends Application {
     }
 
     /**
-     * checks current version. returns true if on current version
+     * checks current version. returns true if not on current version or database was missing
      * @return
      * @throws IOException
      */
