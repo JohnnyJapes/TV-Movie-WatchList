@@ -282,7 +282,7 @@ public class ContentBase {
 
     //CRUD
 
-    public void createTable(){
+    public static void createTable(){
         Connection connection = null;
         try
         {
