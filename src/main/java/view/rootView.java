@@ -6,7 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.HelloApplication;
+import main.Main;
 
 import java.io.IOException;
 
@@ -17,7 +17,7 @@ public class rootView extends Application {
 
         VBox listPane = new VBox(5);
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/hello-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
         stage.setTitle("Hello World!");
         stage.setScene(scene);

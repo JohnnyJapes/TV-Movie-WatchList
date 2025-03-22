@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.HelloApplication;
+import main.Main;
 import model.ListEntry;
 import model.Person.Person;
 import model.content.ContentBase;
@@ -73,7 +73,7 @@ public class NewItemController {
     @FXML
     public void clickTMDBsearch(){
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/search-results.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/search-results.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             SearchResultsController controller = fxmlLoader.getController();
             if(movieRadio.isSelected())

@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import main.HelloApplication;
+import main.Main;
 import model.ContentList;
 import model.ListEntry;
 import model.content.ContentBase;
@@ -158,7 +158,7 @@ public class MainController {
    @FXML
    public void openNewItem() throws IOException {
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/new-item.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/new-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             NewItemController controller = fxmlLoader.getController();
             controller.setCurrentList(listID);       //TODO: make application read from GUI which list is currently selected
@@ -184,7 +184,7 @@ public class MainController {
     @FXML
     public void editButtonClicked() throws IOException{
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/view/edit-item.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/edit-item.fxml"));
             Parent root1 = (Parent) fxmlLoader.load();
             EditItemController controller = fxmlLoader.getController();
             ListEntry selected = currentList.getSelectionModel().getSelectedItem();
