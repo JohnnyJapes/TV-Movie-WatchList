@@ -218,19 +218,19 @@ public class Tables {
      */
     public static void refreshDatabase(){
         deleteDirectory(new File("images"));
-        Movie temp = new Movie();
+        // Movie temp = new Movie();
         createContentTable();
         createCastMemberTable();
         createListEntryTable();
         createPersonTable();
-        temp.getTMDBdetails(680);
-        temp.createRow();
-        ListEntry entry = new ListEntry(temp, 1, 0);
-        Movie temp2 = new Movie(988);
-        entry.createRow();
-        temp2.createRow();
-        ListEntry entry2 = new ListEntry(temp2, 2, 0);
-        entry2.createRow();
+//        temp.getTMDBdetails(680);
+//        temp.createRow();
+//        ListEntry entry = new ListEntry(temp, 1, 0);
+//        Movie temp2 = new Movie(988);
+//        entry.createRow();
+//        temp2.createRow();
+//        ListEntry entry2 = new ListEntry(temp2, 2, 0);
+//        entry2.createRow();
     }
 
     private static boolean deleteDirectory(File directoryToBeDeleted) {
