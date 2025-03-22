@@ -287,7 +287,7 @@ public class ContentBase {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -341,7 +341,7 @@ public class ContentBase {
             try
             {
                 // create a database connection
-                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                connection = DriverManager.getConnection(System.getProperty("dburl"));
                 PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url, releaseDate, director_id)" +
                         " values(?,?,?,?,?,?,?,?,?)");
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -405,7 +405,7 @@ public class ContentBase {
             try
             {
                 // create a database connection
-                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                connection = DriverManager.getConnection(System.getProperty("dburl"));
                 PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdbID) values(?,?,?)");
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -533,7 +533,7 @@ public class ContentBase {
         {
 
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
             //        " values(?,?,?,?,?,?,?)");
             PreparedStatement statement = connection.prepareStatement("select * from content where id=?");
@@ -622,7 +622,7 @@ public class ContentBase {
             try
             {
                 // create a database connection
-                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                connection = DriverManager.getConnection(System.getProperty("dburl"));
                 String sql = "UPDATE content SET title=?, overview=?, total_episodes=?, watched_episodes=?, releaseDate=? WHERE id=?";
                 PreparedStatement statement = connection.prepareStatement(sql);
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -711,7 +711,7 @@ public class ContentBase {
         {
 
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
 
             PreparedStatement statement = connection.prepareStatement("select * from content where tmdb_id=? AND content_type=?");
             statement.setInt(1,tmdbID);
@@ -767,7 +767,7 @@ public class ContentBase {
                     .url(startURL+ query + "/credits?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();

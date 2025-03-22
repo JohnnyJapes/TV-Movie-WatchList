@@ -65,7 +65,7 @@ public class ContentList {
             {
 
                 // create a database connection
-                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                connection = DriverManager.getConnection(System.getProperty("dburl"));
                 //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
                 //        " values(?,?,?,?,?,?,?)");
                 PreparedStatement statement = connection.prepareStatement("select * from content JOIN  ");
@@ -155,7 +155,7 @@ public class ContentList {
         Connection connection = null;
 
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement("select * from listentries where list_id=? Order by rank asc");
             statement.setInt(1, listID);
 

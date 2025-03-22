@@ -105,7 +105,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 .url("https://api.themoviedb.org/3/search/movie?query="+ query+"&include_adult=false&language=en-US&page=1")
                 .get()
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .addHeader("Authorization", System.getProperty("token"))
                 .build();
 
 
@@ -188,12 +188,13 @@ public class Movie extends ContentBase implements TMDBcompatible {
        // String query = StringEscapeUtils.escapeHtml4(tmdbID);
 
         Movie tempMovie = new Movie();
+        //System.out.println("token: " + System.getProperty("token"));
 
         Request request = new Request.Builder()
                 .url("https://api.themoviedb.org/3/movie/" + tmdbID + "?language=en-US")
                 .get()
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .addHeader("Authorization", System.getProperty("token"))
                 .build();
 
         try {
@@ -272,7 +273,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                 .url("https://api.themoviedb.org/3/movie/" + query + "/credits?language=en-US")
                 .get()
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .addHeader("Authorization", System.getProperty("token"))
                 .build();
         Response response = client.newCall(request).execute();
         JsonFactory factory = new JsonFactory();
@@ -376,7 +377,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
                     .url("https://api.themoviedb.org/3/movie/" + query + "/credits?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();
@@ -447,7 +448,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
             try
             {
                 // create a database connection
-                connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+                connection = DriverManager.getConnection(System.getProperty("dburl"));
                 PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url, releaseDate, director_id)" +
                         " values(?,?,?,?,?,?,?,?,?)");
                 statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -514,7 +515,7 @@ public class Movie extends ContentBase implements TMDBcompatible {
         {
 
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
             //        " values(?,?,?,?,?,?,?)");
             PreparedStatement statement = connection.prepareStatement("select * from content where id=?");

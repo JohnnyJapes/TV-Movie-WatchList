@@ -305,7 +305,7 @@ public class Person {
                     .url("https://api.themoviedb.org/3/search/person?query=" + query + "&include_adult=false&language=en-US&page=1")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();
@@ -379,7 +379,7 @@ public class Person {
                     .url("https://api.themoviedb.org/3/person/" + tmdbID + "?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();
@@ -455,7 +455,7 @@ public class Person {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -501,7 +501,7 @@ public class Person {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement("insert into person(name,biography,image_url, birthday, knownFor, gender, tmdb_id)" +
                     " values(?,?,?,?,?,?,?)");
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -557,7 +557,7 @@ public class Person {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
             //        " values(?,?,?,?,?,?,?)");
             PreparedStatement statement = connection.prepareStatement("select * from person where id=?");
@@ -650,7 +650,7 @@ public class Person {
         {
 
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
 
             PreparedStatement statement = connection.prepareStatement("select * from person where name=?");
             statement.setString(1,getName());

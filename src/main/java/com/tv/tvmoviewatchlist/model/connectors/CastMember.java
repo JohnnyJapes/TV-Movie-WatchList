@@ -127,7 +127,7 @@ public class CastMember {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             Statement statement = connection.createStatement();
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -174,7 +174,7 @@ public class CastMember {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement("insert into CastMembers(content_id, person_id, character, rank)" +
                     " values(?,?,?,?)");
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -224,7 +224,7 @@ public class CastMember {
         {
 
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             //PreparedStatement statement = connection.prepareStatement("insert into content(title, overview, tmdb_id, content_type, total_episodes, watched_episodes, image_url)" +
             //        " values(?,?,?,?,?,?,?)");
             PreparedStatement statement = connection.prepareStatement("select * from castmembers where id=?");

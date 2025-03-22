@@ -145,7 +145,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                 .url("https://api.themoviedb.org/3/tv/" + tmdbID + "?language=en-US")
                 .get()
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .addHeader("Authorization", System.getProperty("token"))
                 .build();
 
         try {
@@ -241,7 +241,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                 .url("https://api.themoviedb.org/3/search/tv?query="+ query +"&include_adult=false&language=en-US&page=1")
                 .get()
                 .addHeader("accept", "application/json")
-                .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                .addHeader("Authorization", System.getProperty("token"))
                 .build();
 
 
@@ -331,7 +331,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                         .url("https://api.themoviedb.org/3/tv/" + query + "/credits?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();
@@ -429,7 +429,7 @@ public class TV extends ContentBase implements TMDBcompatible {
                     .url("https://api.themoviedb.org/3/tv/" + query + "?language=en-US")
                     .get()
                     .addHeader("accept", "application/json")
-                    .addHeader("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyODgxODIwZTI3OWFkZGMzN2MzYzNjOTUyYjJlM2VkNCIsInN1YiI6IjY0ZmI2YzY1ZmZjOWRlMGVlM2MzOTA5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.egadbAWxCd6r9WYP6-0BQiSOoctQdoQ_jx283WyDMIw")
+                    .addHeader("Authorization", System.getProperty("token"))
                     .build();
             Response response = client.newCall(request).execute();
             JsonFactory factory = new JsonFactory();

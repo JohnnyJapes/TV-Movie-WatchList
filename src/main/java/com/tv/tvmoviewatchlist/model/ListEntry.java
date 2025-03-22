@@ -132,7 +132,7 @@ public class ListEntry {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement("insert into listentries(list_id, content_id, rank) values(?,?,?)");
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
 
@@ -198,7 +198,7 @@ public class ListEntry {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement("select * from listentries where content_id=?");
             statement.setInt(1,getEntry().getID());
 
@@ -270,7 +270,7 @@ public class ListEntry {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             String sql = "UPDATE listentries SET list_id=?, content_id=?, rank=? where id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setQueryTimeout(30);  // set timeout to 30 sec.
@@ -358,7 +358,7 @@ public class ListEntry {
         try
         {
             // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             String sql = "Delete from listentries where id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1,getID());
@@ -441,7 +441,7 @@ public class ListEntry {
         String sql = "Update listentries SET rank=rank-1 where rank >=? AND list_id=?"  ;
         Connection connection = null;
         try {
-            connection = DriverManager.getConnection("jdbc:sqlite:local.db");
+            connection = DriverManager.getConnection(System.getProperty("dburl"));
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, rank);
             statement.setInt(2, listID);
