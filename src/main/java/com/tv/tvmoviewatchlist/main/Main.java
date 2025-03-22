@@ -4,12 +4,19 @@ import com.tv.tvmoviewatchlist.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import com.tv.tvmoviewatchlist.model.ContentList;
 import com.tv.tvmoviewatchlist.model.Tables;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class Main extends Application {
     @Override
@@ -21,6 +28,15 @@ public class Main extends Application {
         if(checkVersion()){
             Tables.refreshDatabase();
         };
+        //check for properties
+        if (!getPropValues()){
+            Alert alert = new Alert(AlertType.ERROR, "Please create a config.properties following the template");
+            alert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    System.exit(0);
+                }
+            });
+        }
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("TV-Movie Watchlists");
         stage.setResizable(false);
@@ -76,5 +92,38 @@ public class Main extends Application {
         }
 
         return result;
+    }
+
+    /**
+     * Loads properties from config.proprties. Returns false if properties are not found.
+     * @return Boolean
+     * @throws IOException
+     */
+    public Boolean getPropValues() throws IOException {
+        Boolean result = true;
+        InputStream inputStream = null;
+            try {
+                Properties props = new Properties();
+                String propFileName = "config.properties";
+    
+                inputStream = new FileInputStream(propFileName);
+    
+                if (inputStream != null) {
+                    props.load(inputStream);
+                } else {
+                    result = false;
+                    throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+                }    
+                //set properties to system so they are accessible
+                System.setProperty("dburl",props.getProperty("dburl"));
+                System.setProperty("token",props.getProperty("token"));
+            } catch (Exception e) {
+                System.out.println("Exception: " + e);
+                result = false;
+
+            } finally {
+                inputStream.close();
+            }
+            return result;
     }
 }
