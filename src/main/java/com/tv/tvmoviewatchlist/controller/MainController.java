@@ -2,6 +2,7 @@ package com.tv.tvmoviewatchlist.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,21 +11,28 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import com.tv.tvmoviewatchlist.main.Main;
 import com.tv.tvmoviewatchlist.model.ContentList;
 import com.tv.tvmoviewatchlist.model.ListEntry;
+import com.tv.tvmoviewatchlist.model.connectors.CastMember;
 import com.tv.tvmoviewatchlist.model.content.ContentBase;
 import okhttp3.OkHttpClient;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class MainController {
 
 
     @FXML
     ListView<ListEntry> currentList;
+    @FXML
+    HBox castList;
     @FXML
     ImageView poster;
     @FXML
@@ -74,6 +82,7 @@ public class MainController {
     public void getSelectedItem(){
 
         ContentBase selected =  currentList.getSelectionModel().getSelectedItem().getEntry();
+        castList.getChildren().clear();
         if (selected.getContentType() == 1){
             directorLabel.setText(selected.getTopCrew().get(0).getName());
             changingLabel.setText("Director:");
@@ -97,40 +106,83 @@ public class MainController {
         overviewLabel.setText(selected.getOverview());
 
         OkHttpClient client = new OkHttpClient();
-        characterLabel.setText(selected.getCast().get(0).getCharacter());
-        actorLabel.setText(selected.getCast().get(0).getPerson().getName());
-        System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
-        Image image = new Image(selected.getCast().get(0).getPerson().getImage());
-        castImage1.setImage(image);
+        ArrayList<CastMember> cast = selected.getCast();
+        int x = 0;
+        //fill out cast
+        for (CastMember member : cast){
+            try {
+                VBox castBox = new VBox();
+                castBox.setAlignment(Pos.CENTER);
+                castBox.setMinWidth(175);
+                ImageView castImage = new ImageView(new Image(member.getPerson().getImage()));
+                castImage.setFitWidth(125);
+                castImage.setFitHeight(187);
+                HBox characterBox = new HBox();
+                characterBox.setAlignment(Pos.CENTER);
+                characterBox.setMinHeight(20);
+                Label characterLabel = new Label(member.getCharacter());
+                characterLabel.setFont(new Font(18));
+                characterLabel.setStyle("-fx-font-weight: bold");
+                characterLabel.setAlignment(Pos.CENTER_LEFT);
+                characterLabel.setWrapText(true);
+                characterBox.getChildren().add(characterLabel);
+                HBox actorBox = new HBox();
+                actorBox.setAlignment(Pos.CENTER);
+                Label actorLabel = new Label(member.getPerson().getName());
+                actorLabel.setFont(new Font(14));
+                actorLabel.setAlignment(Pos.CENTER_LEFT);
+                actorBox.getChildren().add(actorLabel);
+                //add to castbox
+                castBox.getChildren().addAll(castImage, characterBox, actorBox);
+                if (x%2 == 0){
+                    castBox.setStyle("-fx-background-color: lightgray");
+                }
 
-        //2nd cast member
-        try{
-            characterLabel2.setText(selected.getCast().get(1).getCharacter());
-            actorLabel2.setText(selected.getCast().get(1).getPerson().getName());
-            System.out.println("ID PIC: " + selected.getCast().get(1).getPerson().getID());
-            image = new Image(selected.getCast().get(1).getPerson().getImage());
-            castImage2.setImage(image);
+
+                castList.getChildren().add(castBox);
+                x++;
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
         }
-        catch (Error e){
-            e.printStackTrace();
-            characterLabel2.setVisible(false);
-            actorLabel2.setVisible(false);
-            castImage2.setVisible(false);
-        }
-        //3rd cast member
-        try{
-            characterLabel3.setText(selected.getCast().get(2).getCharacter());
-            actorLabel3.setText(selected.getCast().get(2).getPerson().getName());
-            System.out.println("ID PIC: " + selected.getCast().get(2).getPerson().getID());
-            image = new Image(selected.getCast().get(2).getPerson().getImage());
-            castImage3.setImage(image);
-        }
-        catch (Error e){
-            e.printStackTrace();
-            characterLabel2.setVisible(false);
-            actorLabel2.setVisible(false);
-            castImage2.setVisible(false);
-        }
+
+        //castList.getItems().add(null);
+        // characterLabel.setText(selected.getCast().get(0).getCharacter());
+        // actorLabel.setText(selected.getCast().get(0).getPerson().getName());
+        // System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
+        // Image image = new Image(selected.getCast().get(0).getPerson().getImage());
+        // castImage1.setImage(image);
+
+        // //2nd cast member
+        // try{
+        //     characterLabel2.setText(selected.getCast().get(1).getCharacter());
+        //     actorLabel2.setText(selected.getCast().get(1).getPerson().getName());
+        //     System.out.println("ID PIC: " + selected.getCast().get(1).getPerson().getID());
+        //     image = new Image(selected.getCast().get(1).getPerson().getImage());
+        //     castImage2.setImage(image);
+        // }
+        // catch (Error e){
+        //     e.printStackTrace();
+        //     characterLabel2.setVisible(false);
+        //     actorLabel2.setVisible(false);
+        //     castImage2.setVisible(false);
+        // }
+        // //3rd cast member
+        // try{
+        //     characterLabel3.setText(selected.getCast().get(2).getCharacter());
+        //     actorLabel3.setText(selected.getCast().get(2).getPerson().getName());
+        //     System.out.println("ID PIC: " + selected.getCast().get(2).getPerson().getID());
+        //     image = new Image(selected.getCast().get(2).getPerson().getImage());
+        //     castImage3.setImage(image);
+        // }
+        // catch (Error e){
+        //     e.printStackTrace();
+        //     characterLabel2.setVisible(false);
+        //     actorLabel2.setVisible(false);
+        //     castImage2.setVisible(false);
+        // }
     }
 
     public void setCurrentList(ContentList list){
