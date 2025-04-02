@@ -34,6 +34,8 @@ public class MainController {
     @FXML
     HBox castList;
     @FXML
+    VBox detailView;
+    @FXML
     ImageView poster;
     @FXML
     Label titleLabel, directorLabel, yearLabel, characterLabel, actorLabel, overviewLabel, changingLabel;
@@ -78,11 +80,19 @@ public class MainController {
         fullList = new ContentList();
         readContentTable();
     }
+    /**
+     * Displays item in detail view when selected on list
+     */
     @FXML
     public void getSelectedItem(){
 
+        //show detail view
+        detailView.setVisible(true);
+        //fetch selected item
         ContentBase selected =  currentList.getSelectionModel().getSelectedItem().getEntry();
+        //reset cast list
         castList.getChildren().clear();
+        //fill out 
         if (selected.getContentType() == 1){
             directorLabel.setText(selected.getTopCrew().get(0).getName());
             changingLabel.setText("Director:");
@@ -104,9 +114,8 @@ public class MainController {
 
         yearLabel.setText(Integer.toString(selected.getReleaseDate().getYear()));
         overviewLabel.setText(selected.getOverview());
-
-        OkHttpClient client = new OkHttpClient();
         ArrayList<CastMember> cast = selected.getCast();
+        //variable to alternate colors for cast members
         int x = 0;
         //fill out cast
         for (CastMember member : cast){
@@ -134,57 +143,23 @@ public class MainController {
                 actorBox.getChildren().add(actorLabel);
                 //add to castbox
                 castBox.getChildren().addAll(castImage, characterBox, actorBox);
+                //highlight if necessary
                 if (x%2 == 0){
                     castBox.setStyle("-fx-background-color: lightgray");
                 }
-
-
                 castList.getChildren().add(castBox);
                 x++;
             } catch (Exception e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
         }
-
-        //castList.getItems().add(null);
-        // characterLabel.setText(selected.getCast().get(0).getCharacter());
-        // actorLabel.setText(selected.getCast().get(0).getPerson().getName());
-        // System.out.println("ID PIC: " + selected.getCast().get(0).getPerson().getID());
-        // Image image = new Image(selected.getCast().get(0).getPerson().getImage());
-        // castImage1.setImage(image);
-
-        // //2nd cast member
-        // try{
-        //     characterLabel2.setText(selected.getCast().get(1).getCharacter());
-        //     actorLabel2.setText(selected.getCast().get(1).getPerson().getName());
-        //     System.out.println("ID PIC: " + selected.getCast().get(1).getPerson().getID());
-        //     image = new Image(selected.getCast().get(1).getPerson().getImage());
-        //     castImage2.setImage(image);
-        // }
-        // catch (Error e){
-        //     e.printStackTrace();
-        //     characterLabel2.setVisible(false);
-        //     actorLabel2.setVisible(false);
-        //     castImage2.setVisible(false);
-        // }
-        // //3rd cast member
-        // try{
-        //     characterLabel3.setText(selected.getCast().get(2).getCharacter());
-        //     actorLabel3.setText(selected.getCast().get(2).getPerson().getName());
-        //     System.out.println("ID PIC: " + selected.getCast().get(2).getPerson().getID());
-        //     image = new Image(selected.getCast().get(2).getPerson().getImage());
-        //     castImage3.setImage(image);
-        // }
-        // catch (Error e){
-        //     e.printStackTrace();
-        //     characterLabel2.setVisible(false);
-        //     actorLabel2.setVisible(false);
-        //     castImage2.setVisible(false);
-        // }
     }
 
+    /**
+     * Gets which list the user is on (watching, complete, etc.)
+     * @param list
+     */
     public void setCurrentList(ContentList list){
          currentList.getItems().clear();
         for (ListEntry ent : list.getListEntries()){
@@ -207,6 +182,10 @@ public class MainController {
 
     }
 
+    /**
+     * Opens window to add a new item to the list
+     * @throws IOException
+     */
    @FXML
    public void openNewItem() throws IOException {
         try{
@@ -233,6 +212,10 @@ public class MainController {
             e.printStackTrace();
         }
     }
+    /**
+     * Opens window to edit the selected item
+     * @throws IOException
+     */
     @FXML
     public void editButtonClicked() throws IOException{
         try {
@@ -264,6 +247,10 @@ public class MainController {
         }
 
     }
+    /**
+     * Delete currently selected Item
+     * @throws IOException
+     */
     @FXML
     public void deleteButtonClicked() throws IOException{
         ListEntry selected = currentList.getSelectionModel().getSelectedItem();
